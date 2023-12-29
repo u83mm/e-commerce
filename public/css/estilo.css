@@ -183,9 +183,14 @@ img {
 	align-self: center;
 }
 
+
+
+
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
-
+	.home-images-main {
+		height: 13em;		
+	}
 }
 
 /************************************************************************
