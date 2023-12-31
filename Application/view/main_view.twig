@@ -4,7 +4,7 @@
 {% endblock title %}
 
 {% block main %}
-    <section class="row col-sm-12 col-lg-11 mb-5 mx-auto">
+    <div class="row col-sm-12 col-lg-11 mb-5 mx-auto">
         <section class="col-sm-12 col-lg-6 home-text-main">
             <h2 class="text-center">Welcome to our online-shop</h2>
             <p>
@@ -13,15 +13,15 @@
                 nobis quasi expedita cum architecto. Saepe quod aliquam unde.
             </p>
         </section>
-        <section class="col-sm-12 col-lg-6 home-images-main">
+        <figure class="col-sm-12 col-lg-6 home-images-main">
             <img src="images/home_01.webp" alt="shopping girl">
-        </section>
-    </section>
+        </figure>
+    </div>
 
-    <section class="row col-sm-12 col-lg-11 mb-5 mx-auto">
-        <section class="col-sm-12 col-lg-6 d-none d-lg-inline-block home-images-main">
+    <div class="row col-sm-12 col-lg-11 mb-5 mx-auto">
+        <figure class="col-sm-12 col-lg-6 d-none d-lg-inline-block home-images-main">
             <img src="images/home_02.webp" alt="shopping girl">
-        </section>
+        </figure>
         <section class="col-sm-12 col-lg-6 home-text-main">
             <h2 class="text-center">Visit our products section</h2>
             <p>
@@ -29,15 +29,16 @@
                 nostrum consequatur? Unde eius animi rem, saepe dignissimos consectetur laboriosam 
                 nobis quasi expedita cum architecto. Saepe quod aliquam unde.
             </p>
-            <a class="btn btn-outline-primary" href="#">Go to our products</a>
-            
+            <div class="text-center text-lg-start mb-3">
+                <a class="btn btn-outline-primary" href="/products">Go to our products</a>   
+            </div>                     
         </section>
-        <section class="col-sm-12 col-lg-6 d-lg-none home-images-main">
+        <figure class="col-sm-12 col-lg-6 d-lg-none home-images-main">
             <img src="images/home_02.webp" alt="shopping girl">
-        </section>       
-    </section>
+        </figure>       
+    </div>
 
-    <section class="row col-sm-12 col-lg-11 mb-5 mx-auto">
+    <div class="row col-sm-12 col-lg-11 mb-5 mx-auto">
         <section class="col-sm-12 col-lg-6 home-text-main">
             <h2 class="text-center">Contact with us</h2>
             <p>
@@ -46,8 +47,8 @@
                 nobis quasi expedita cum architecto. Saepe quod aliquam unde.
             </p>
         </section>
-        <section class="col-sm-12 col-lg-6 home-images-main">
+        <figure class="col-sm-12 col-lg-6 home-images-main">
             <img src="images/home_03.webp" alt="call center">
-        </section>
-    </section>
+        </figure>
+    </div>
 {% endblock main %}
