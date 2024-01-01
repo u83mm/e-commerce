@@ -26,7 +26,11 @@
             $url = $this->splitUrl();
 
             /** select controller */
-            $filename = SITE_ROOT . "/../Application/Controller/" . ucfirst($url[0]) . "Controller.php";                                           
+            $filename = SITE_ROOT . "/../Application/Controller/" . ucfirst($url[0]) . "Controller.php"; 
+            
+            if(!file_exists($filename)) {
+                $filename = SITE_ROOT . "/../Application/Controller/$url[0]/" . ucfirst($url[0]) . "Controller.php";
+            }            
             
             if(file_exists($filename)) {
                 require_once($filename);                
