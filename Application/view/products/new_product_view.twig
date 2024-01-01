@@ -1,0 +1,10 @@
+{% extends "base.twig" %}
+
+{% block title %}E-commerce | New Product{% endblock title %}
+
+{% block main %}
+    <section class="row">
+        <h3 class="text-center">Create new product</h3>
+        {% include "products/form_view.twig" %}
+    </section>    
+{% endblock main %}
