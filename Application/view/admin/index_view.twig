@@ -1,5 +1,15 @@
 {% extends "base.twig" %}
 
+{% block title %}
+    E-commerce | Admin
+{% endblock title %}
+
 {% block main %}
     <h4>Admin view</h4>
+    <section class="row rounded shadow p-5">
+        <h3 class="text-center">Manage Products</h3>
+        <a href="/products">Show products</a>
+        <a href="/products/new">Create Product</a>
+
+    </section>
 {% endblock main %}

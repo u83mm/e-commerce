@@ -43,17 +43,14 @@
          * Método para validar entradas de formulario
          */
         public function validate_form(array $fields): bool
-        {                 
-            $result = true;
-            
+        {                                         
             foreach ($fields as $key => $value) {
                 if (empty($value) || !isset($value)) {                                        
-                    $this->msg .= "<p class='alert alert-danger text-center'>'$key' es un dato requerido</p>";
-                    $result = false;					
+                    throw new \Exception("'" . ucfirst($key) . "' is a required field.", 1);                                        				
                 }
             }
                       
-            return $result;
+            return true;
         }
         
         /**
