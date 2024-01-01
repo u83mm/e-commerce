@@ -10,12 +10,12 @@
         }
 
         public function index() {
-
             try {
                 if (!$this->products) {
                     $this->render('products/index_view.twig', [
                         'menus'         =>  $this->showNavLinks(), 
-                        'error_message' =>  "There aren't products to show.",                        
+                        'error_message' =>  "There aren't products to show.",
+                        'session'       =>  $_SESSION,                        
                         'active'        =>  'catalog',                
                     ]);
                 }
@@ -41,8 +41,7 @@
                     'menus'             => $this->showNavLinks(),
                     'exception_message' => $error_msg,                
                 ]);
-            }
-            
+            }            
         }
     }    
 ?>
