@@ -11,6 +11,11 @@
 
         public function index(): void {           
             try {
+                // Test for authorized access
+                if(!$this->testAccess(['ROLE_ADMIN'])) {
+                    throw new Exception("Unauthorized access!", 1);
+                }
+                
                 $this->render('admin/index_view.twig', [
                     'menus'     =>  $this->showNavLinks(),                         
                     'session'   =>  $_SESSION,                        
@@ -18,7 +23,7 @@
                 ]);
             } catch (\Throwable $th) {
                 $error_msg = [
-                    'error' =>  $th->getMessage(),
+                    'Error:' =>  $th->getMessage(),
                 ];
 
                 if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
