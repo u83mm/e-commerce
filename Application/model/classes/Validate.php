@@ -45,8 +45,9 @@
         public function validate_form(array $fields): bool
         {                                         
             foreach ($fields as $key => $value) {
-                if (empty($value) || !isset($value)) {                                        
-                    throw new \Exception("'" . ucfirst($key) . "' is a required field.", 1);                                        				
+                if (empty($value) || !isset($value)) {                                                              
+                    $this->msg .= "'" . ucfirst($key) . "' is a required field.";  
+                    return false;                                   				
                 }
             }
                       
