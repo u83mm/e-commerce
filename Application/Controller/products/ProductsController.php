@@ -121,8 +121,8 @@
                             $original = $commonTask->createImageFromSource($upload_filename, $type);
 
                             // Resize the image    
-                            $w = 600; // width value for the new image
-                            $h = 400; // heigh value for the new image
+                            $w = 400; // width value for the new image
+                            $h = 500; // heigh value for the new image
                             $final_image = $commonTask->resizeImage($original, $w, $h);
 
                             // replace the image on the server

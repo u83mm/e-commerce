@@ -3,7 +3,7 @@
 
     class CommonTasks
     {
-        // da formato a fechas que son Strings para que las muestre en formato ('dd-mm-YYYY')
+        // Da formato a fechas que son Strings para que las muestre en formato ('dd-mm-YYYY')
         
         public function showDayMonthYear(string $date = null): string
         {
@@ -101,7 +101,7 @@
         }
 
 
-        // Función para redimiensionado de imágenes 
+        // Función para redimensionado de imágenes 
         
         public function resizeImage($original, $w, $h) {
             try {
@@ -124,7 +124,7 @@
         }
 
 
-        //Convierte una dirección absoluta a una para poder ver la ruta en navegador
+        // Convierte una dirección absoluta a una para poder ver la ruta en navegador
 
         function getWebPath(string|null $file_system_path): string
         {            
