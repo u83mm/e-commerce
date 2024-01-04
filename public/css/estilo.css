@@ -184,10 +184,25 @@ textarea {
 	width: 6em;
 }
 
+.products figure {
+	height: 10em;
+	text-align: center;
+	align-self: center;
+	margin-bottom: 4em;
+}
+
+li {
+	list-style: none;
+}
+
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
 	.home-images-main {
 		height: 13em;		
+	}
+
+	.products figure {
+		height: 13em;
 	}
 }
 
