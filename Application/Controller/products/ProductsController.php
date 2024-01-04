@@ -8,13 +8,23 @@
 
     class ProductsController extends Controller
     {
-        public function __construct(private array $products = [], private object $dbcon = DB_CON) {
-            
+        public function __construct(
+            private array $products = [],
+            private $categories = [],
+            private object $dbcon = DB_CON
+        ) 
+        {
+
         }
 
         /** Show products index */
         public function index() {
             try {
+                $query = new Query;
+
+                // We obtain all products from DB
+                $this->products = $query->selectAll('products', $this->dbcon);
+
                 if (!$this->products) {
                     $this->render('products/index_view.twig', [
                         'menus'         =>  $this->showNavLinks(), 
@@ -23,11 +33,12 @@
                         'active'        =>  'catalog',                
                     ]);
                 }
-
+                
                 $this->render('products/index_view.twig', [
                     'menus'     =>  $this->showNavLinks(),
                     'session'   =>  $_SESSION,
                     'active'    => 'catalog',
+                    'products'  =>  $this->products,
                 ]);
 
             } catch (\Throwable $th) {
@@ -60,6 +71,13 @@
                     throw new Exception("Unauthorized access!", 1);
                 }
 
+                // Building objects
+                $commonTask = new CommonTasks;
+                $query = new Query;
+
+                // Get all categories
+                $this->categories = $query->selectAll('category', $this->dbcon);                
+
                 // If form is send and is valid
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Get values from form
@@ -67,6 +85,7 @@
                         'name'          =>!empty($_POST['name'])        ? $validate->test_input($_POST['name']) : null,
                         'description'   =>!empty($_POST['description']) ? $validate->test_input($_POST['description']) : null,
                         'price'         =>!empty($_POST['price'])       ? $validate->test_input($_POST['price']) : "",
+                        'id_category'   =>!empty($_POST['category'])    ? $validate->test_input($_POST['category']): "",
                     ];                    
                     
                     // Save data in DB
@@ -116,8 +135,7 @@
                                 );                                
                             }                                                        
 
-                            // Create file type (jpeg, jpg, png or gif)
-                            $commonTask = new CommonTasks;
+                            // Create file type (jpeg, jpg, png or gif)                            
                             $original = $commonTask->createImageFromSource($upload_filename, $type);
 
                             // Resize the image    
@@ -134,16 +152,16 @@
                             throw new Exception("The file format must be (jpeg, jpg, gif or png).");                    	
                         }
 
-                        // Insert data in DB
-                        $query = new Query;
-                        $fields['image'] = $upload_filename;
+                        // Insert data in DB                        
+                        $fields['image'] = $commonTask->getWebPath($upload_filename);
 
                         $query->insertInto('products', $fields, $this->dbcon);
 
                         $this->render('products/new_product_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
                             'session'   =>    $_SESSION,
-                            'active'    =>    'administration',                            
+                            'active'    =>    'administration',
+                            'categories'    =>  $this->categories,                            
                             'message'   =>    "Product saved successfully!",
                         ]);                        
                     }
@@ -153,15 +171,17 @@
                             'session'       =>  $_SESSION,
                             'active'        => 'administration',
                             'fields'        =>  $fields,
+                            'categories'    =>  $this->categories,
                             'error_message' => $validate->get_msg(),
                         ]);
                     }
                 }
                                                 
                 $this->render('products/new_product_view.twig', [
-                    'menus'     =>  $this->showNavLinks(),
-                    'session'   =>  $_SESSION,
-                    'active'    => 'administration',
+                    'menus'         =>  $this->showNavLinks(),
+                    'session'       =>  $_SESSION,
+                    'active'        =>  'administration',
+                    'categories'    =>  $this->categories,
                 ]);
 
             } catch (\Throwable $th) {
