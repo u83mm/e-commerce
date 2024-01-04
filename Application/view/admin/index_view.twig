@@ -6,10 +6,22 @@
 
 {% block main %}
     <h4>Admin view</h4>
-    <section class="row rounded shadow p-5">
-        <h3 class="text-center">Manage Products</h3>
-        <a href="/products">Show products</a>
-        <a href="/products/new">Create Product</a>
-
-    </section>
+    <section class="row mb-3 justify-content-evenly">
+        <fieldset class="col-12 col-md-5 rounded shadow p-5 mb-4">
+            <legend><h5 class="text-center">Manage Products</h5></legend>
+            <ul>
+                <li>
+                    <a href="/products">Show products</a>
+                </li>
+                <li>
+                    <a href="/products/new">Create Product</a>
+                </li>
+            </ul>                        
+        </fieldset> 
+        
+        <fieldset class="col-12 col-md-5 rounded shadow p-5 mb-4">
+            <legend><h5 class="text-center">Manage Categories</h5>  </legend>
+            <a href="#">Create Category</a>
+        </fieldset>
+    </section>   
 {% endblock main %}
