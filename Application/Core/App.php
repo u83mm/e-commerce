@@ -35,7 +35,7 @@
             if(file_exists($filename)) {
                 require_once($filename);                
                 $this->controller = ucfirst($url[0]) . "Controller";                
-                //unset($url[0]);                               
+                array_shift($url);                               
             }
             else {
                 $filename = SITE_ROOT . "/../Application/Controller/ErrorController.php";    
@@ -46,13 +46,13 @@
             $controller = new $this->controller;                        
             
             /** select method */
-            if(count($url) > 1) {
-                if(method_exists($controller, $url[1])) {
-                    $this->method = $url[1];
-                }
-                //unset($url[1]);
-            }                         
-
+            if(count($url) > 0) {
+                if(method_exists($controller, $url[0])) {
+                    $this->method = $url[0];
+                    array_shift($url);
+                }  
+            }
+                                
             call_user_func_array([$controller, $this->method], $url);
         }
     }    
