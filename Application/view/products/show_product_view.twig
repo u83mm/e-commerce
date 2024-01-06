@@ -4,20 +4,21 @@
     E-commerce | Show Product
 {% endblock title %}
 
-{% block main %}
-    <h3 class="text-center">Show Product</h3>
-    <section class="row rounded shadow p-3 p-lg-5 show-product">
+{% block main %}    
+    <section class="row rounded shadow p-3 p-lg-5 show-product">        
         <figure class="col-sm-12 col-md-4 text-center">
             <img src="{{ product.image }}" alt="Product {{ product.id }}">              
             <figcaption>{{ product.name }}</figcaption>            
         </figure>
         <article class="col-md-8">
-            <p>{{ product.description }}</p>
-            <p>Price: {{ product.price }}</p>
+            <h3 class="text-center">{{product.name}}</h3>
+            <p>{{ product.description|nl2br }}</p>
+            {% set currency = '€' %}
+            <p>Price: {{ product.price ~ "%s"|format(currency) }}</p>
             <a class="btn btn-outline-primary" href="#">Add to cart</a>
             {% if session.role == 'ROLE_ADMIN' %}
                 <a class="btn btn-outline-primary" href="/products/edit/{{ product.id }}">Edit product</a>
-                <a class="btn btn-outline-danger" href="#">Delete product</a>
+                {{ include('products/delete_form.twig') }}
             {% endif %}
         </article>
     </section>    

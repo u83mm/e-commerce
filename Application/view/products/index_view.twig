@@ -9,8 +9,9 @@
     <section class="row rounded shadow p-3 p-lg-5 products">
         {% for product in products %}
             <figure class="col-sm-6 col-lg-3">
-                <a href="/products/show/{{ product.id }}"><img src="{{ product.image }}" alt="Product {{ product.id }}"></a>                
-                <figcaption>{{ product.name }}<br>Price: {{ product.price }}</figcaption>                
+                <a href="/products/show/{{ product.id }}"><img src="{{ product.image }}" alt="Product {{ product.id }}"></a>
+                {% set currency = "€" %}                
+                <figcaption>{{ product.name }}<br>Price: {{ product.price ~ "%s"|format(currency) }}</figcaption>                
             </figure>
         {% endfor %}
     </section>
