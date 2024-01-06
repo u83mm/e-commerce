@@ -135,7 +135,11 @@
         // Delete picture from server
         public function deletePicture(string $cadena = null): void
         {
-            if($cadena) unlink($cadena);
+            try {
+                if($cadena) unlink($_SERVER['DOCUMENT_ROOT'] . $cadena);
+            } catch (\Throwable $th) {
+                throw new \Exception("Error delecting image!. {$th->getMessage()}", 1);                
+            }            
         }
         
 

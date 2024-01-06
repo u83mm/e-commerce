@@ -105,7 +105,9 @@
             
             $query = rtrim($query, ",");
             $query .= " WHERE id = :id";
-            $params[":id"] = $id;                      
+            $params[":id"] = $id;  
+            
+            dump($params);
                                                   
             try {
                 $stm = $dbcon->pdo->prepare($query);                        
