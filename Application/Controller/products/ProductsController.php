@@ -213,8 +213,7 @@
                 // Build objects
                 $query = new Query;
 
-                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id, $this->dbcon);
-                dump($product);
+                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id, $this->dbcon);                
                 
                 $this->render('products/show_product_view.twig', [
                     'menus'     =>  $this->showNavLinks(),
