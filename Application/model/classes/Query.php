@@ -191,11 +191,7 @@
         {
             $query = "SELECT * FROM $table1 
                         INNER JOIN $table2 
-                        ON $table1.$foreignKeyField = $table2.$foreignKeyField";
-                
-            $query = "SELECT * FROM $table1 
-                        INNER JOIN $table2 
-                        ON $table1.$foreignKeyField = $table2.$foreignKeyField";
+                        ON $table1.$foreignKeyField = $table2.$foreignKeyField";                            
                 
             try {
                 $stm = $dbcon->pdo->prepare($query);                                                   
