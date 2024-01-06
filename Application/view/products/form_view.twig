@@ -38,7 +38,7 @@
         <select name="category" id="category" required>
             <option value="">- Select category -</option>
             {% for category in categories %}
-            <option value="{{ category.id }}">{{ category.name|capitalize }}</option>
+            <option value="{{ category.id_category }}">{{ category.category|capitalize }}</option>
             {% endfor %}
         </select>
     </div> 

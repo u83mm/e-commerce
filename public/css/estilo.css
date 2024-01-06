@@ -195,6 +195,10 @@ li {
 	list-style: none;
 }
 
+figcaption {
+	padding: 0.8em;
+}
+
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
 	.home-images-main {
@@ -204,6 +208,7 @@ li {
 	.products figure {
 		height: 13em;
 	}
+	
 }
 
 /************************************************************************
@@ -217,20 +222,24 @@ li {
 *			Configuración para tablets portrait (retrato)						*
 ************************************************************************/
 @media (min-width:481px) and (max-width: 768px) {
-	
+	.show-product img {
+		height: 15em;
+	}
 }
 
 /***************************************************************
 *		Configuración para tablets landscape (horizontal)	   *
 ***************************************************************/
 @media (min-width: 769px) and (max-width: 1050px) {
-
+	
 }
 
 /***************************************************************
 *			 Configuración para KINDLE FIRE					   *
 ***************************************************************/
-@media (min-width: 1051px) and (max-width: 1280px) {
-		
+@media (min-width: 1051px)  {
+	.show-product figure {
+		height: 20em;
+	}
 }
 
