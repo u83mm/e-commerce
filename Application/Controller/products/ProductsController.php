@@ -71,7 +71,7 @@
                     throw new Exception("Unauthorized access!", 1);
                 }
 
-                // Building objects
+                // Build objects
                 $commonTask = new CommonTasks;
                 $query = new Query;
 
@@ -203,6 +203,45 @@
                     'exception_message' => $error_msg,                
                 ]);
             }
+        }
+
+        /** Show product */
+        public function show(string $id = "") : void {  
+            try {
+                if(empty($id)) throw new Exception("There are any product to show.", 1);
+
+                // Build objects
+                $query = new Query;
+
+                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id, $this->dbcon);
+                dump($product);
+                
+                $this->render('products/show_product_view.twig', [
+                    'menus'     =>  $this->showNavLinks(),
+                    'session'   =>  $_SESSION,
+                    'active'    =>  'catalog', 
+                    'product'   =>  $product,                   
+                ]);
+
+            } catch (\Throwable $th) {
+                $error_msg = [
+                    'Error:' =>  $th->getMessage(),
+                ];
+
+                if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
+                    $error_msg = [
+                        "Message:"  =>  $th->getMessage(),
+                        "Path:"     =>  $th->getFile(),
+                        "Line:"     =>  $th->getLine(),
+                    ];
+                }
+
+                $this->render('error_view.twig', [
+                    'menus'             => $this->showNavLinks(),
+                    'exception_message' => $error_msg,                
+                ]);
+            }          
+            
         }
     }    
 ?>

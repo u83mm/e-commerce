@@ -1,0 +1,14 @@
+{% extends "base.twig" %}
+
+{% block title %}
+    E-commerce | Show Product
+{% endblock title %}
+
+{% block main %}
+    <h4>Show Product View</h4>
+    <figure class="col-sm-6 col-lg-3 text-center">
+        <img src="{{ product.image }}" alt="Product {{ product.id }}">              
+        <figcaption>{{ product.name }}</figcaption>
+        <p>Price: {{ product.price }}</p>
+    </figure>
+{% endblock main %}
