@@ -93,19 +93,19 @@
             }
         }
 
-        public function updateRegistry(string $table, array $fields, string $primary_key_name, object $dbcon): void
+        public function updateRegistry(string $table, array $fields, $id, object $dbcon): void
         {
             $query = "UPDATE $table SET";
-            $params = [];
+            $params = [];                        
             
             foreach ($fields as $key => $value) {
-               if($key !== $primary_key_name)  $query .= " $key = :$key,";
+               $query .= " $key = :$key,";
                $params[":$key"] = $value;
-            }
+            }            
             
             $query = rtrim($query, ",");
-            $query .= " WHERE $primary_key_name = :$primary_key_name";
-            $params[":$primary_key_name"] = $fields[$primary_key_name];                        
+            $query .= " WHERE id = :id";
+            $params[":id"] = $id;                      
                                                   
             try {
                 $stm = $dbcon->pdo->prepare($query);                        
