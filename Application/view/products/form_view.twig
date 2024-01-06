@@ -1,11 +1,11 @@
-<form class="rounded shadow p-2 p-md-5" action="/products/new" method="post" enctype="multipart/form-data">
+<form class="rounded shadow p-2 p-md-5" action="{% if product is defined %} /products/edit/{{ product.id }} {% else %} /products/new {% endif %}" method="post" enctype="multipart/form-data">
     <!-- Name -->
 
     <div class="col-12 col-sm-2 col-lg-4 d-inline-block text-center text-lg-end">
         <label class="form-label text-center text-lg-end" for="name">Name:</label>        
     </div>
     <div class="col-12 col-sm-9 col-lg-6 d-inline-block mb-3">
-        <input class="form-control" type="text" name="name" id="name" value="{{ fields.name }}" placeholder="Product name" required>
+        <input class="form-control" type="text" name="name" id="name" value="{{ fields.name }}{{ product.name }}" placeholder="Product name" required>
     </div>
 
 
@@ -15,7 +15,7 @@
         <label class="col-form-label text-center text-lg-end" for="description">Description:</label>        
     </div>
     <div class="col-12 col-lg-6 d-inline-block">
-        <textarea class="form-control" name="description" id="description" cols="30" rows="10" placeholder="Product description" required>{{ fields.description }}</textarea>      
+        <textarea class="form-control" name="description" id="description" cols="30" rows="10" placeholder="Product description" required>{{ fields.description }}{{ product.description }}</textarea>      
     </div>
 
 
@@ -25,7 +25,7 @@
         <label class="col-form-label text-center text-lg-end" for="price">Price:</label>       
     </div>       
     <div class="col-6 col-lg-6 d-inline-block mb-3">
-        <input class="form-control" type="text" name="price" id="price" value="{{ fields.price }}" placeholder="0.00" required>
+        <input class="form-control" type="text" name="price" id="price" value="{{ fields.price }}{{ product.price }}" placeholder="0.00" required>
     </div> 
 
 
@@ -36,7 +36,13 @@
     </div> 
     <div class="col-6 col-lg-6 d-inline-block mb-3">
         <select name="category" id="category" required>
-            <option value="">- Select category -</option>
+            <option value="{% if product.category is defined %}{{ product.id_category }}{% endif %}">
+                {% if product.category is defined %}
+                    {{ product.category|capitalize }}
+                {% else %}
+                    - Select category -
+                {% endif %}
+            </option>
             {% for category in categories %}
             <option value="{{ category.id_category }}">{{ category.category|capitalize }}</option>
             {% endfor %}
@@ -51,13 +57,13 @@
         <label class="col-form-label text-center text-lg-end" for="image">Select image:</label>       
     </div> 
     <div class="col-sm-12 col-lg-6 d-inline-block mb-3">
-        <input class="form-control" type="file" name="image" id="image" required>
+        <input class="form-control" type="file" name="image" id="image">
     </div>  
     
     <div class="col-sm-12 col-lg-4 d-inline-block text-sm-center text-lg-end">
                      
     </div>       
     <div class="col-sm-12 col-lg-6 d-inline-block">
-        <button class="btn btn-outline-secondary" type="submit">New product</button>
+        <button class="btn btn-outline-secondary" type="submit">{{ button_label|default('New Product') }}</button>        
     </div>
 </form>

@@ -1,0 +1,12 @@
+{% extends "base.twig" %}
+
+{% block title %}
+    Ecommerce | Edit product
+{% endblock title %}
+
+{% block main %}
+    <section class="row">
+        <h3 class="text-center">Edit Product View</h3>
+        {{ include('products/form_view.twig', {'button_label': 'Edit product'}) }}
+    </section>    
+{% endblock main %}
