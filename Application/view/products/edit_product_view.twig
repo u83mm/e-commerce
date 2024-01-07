@@ -5,8 +5,14 @@
 {% endblock title %}
 
 {% block main %}
-    <section class="row">
+    <section class="row row rounded shadow p-3 edit-product">
         <h3 class="text-center">Edit Product View</h3>
-        {{ include('products/form_view.twig', {'button_label': 'Edit product'}) }}
+        <figure class="col-sm-12 col-md-4 d-md-none d-lg-block text-center">
+            <img src="{{ product.image }}" alt="Product {{ product.id }}">              
+            <figcaption>{{ product.name }}</figcaption>            
+        </figure>
+        <article class="col-md-12 col-lg-8">            
+            {{ include('products/form_view.twig', {'button_label': 'Edit product'}) }}
+        </article>        
     </section>    
 {% endblock main %}

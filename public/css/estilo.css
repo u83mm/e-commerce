@@ -52,8 +52,7 @@ h2 {
 }
 
 h3 {
-	font-size: 1.17em;
-	margin-left: 10px;
+	font-size: 1.17em;	
 }
 
 h4 {
@@ -126,12 +125,8 @@ header {
 	background: lightgray;
 }
 
-input[type="button"], [type="text"], [type="number"], [type="submit"] {
+input[type="button"], [type="text"], [type="number"] {
 	padding: 0.5em;
-}
-
-form {
-	margin-top: 2em;
 }
 
 pre {
@@ -222,7 +217,7 @@ figcaption {
 *			Configuración para tablets portrait (retrato)						*
 ************************************************************************/
 @media (min-width:481px) and (max-width: 768px) {
-	.show-product img {
+	.show-product img, .edit-product figure {
 		height: 15em;
 	}
 }
@@ -238,7 +233,7 @@ figcaption {
 *			 Configuración para KINDLE FIRE					   *
 ***************************************************************/
 @media (min-width: 1051px)  {
-	.show-product figure {
+	.show-product figure, .edit-product figure {
 		height: 20em;
 	}
 }

@@ -1,40 +1,40 @@
-<form class="rounded shadow p-2 p-md-5" action="{% if product is defined %} /products/edit/{{ product.id }} {% else %} /products/new {% endif %}" method="post" enctype="multipart/form-data">
+<form action="{% if product is defined %} /products/edit/{{ product.id }} {% else %} /products/new {% endif %}" method="post" enctype="multipart/form-data">
     <!-- Name -->
 
-    <div class="col-12 col-sm-2 col-lg-4 d-inline-block text-center text-lg-end">
+    <div class="col-12 col-sm-2 col-md-4 col-lg-3 d-inline-block text-center text-md-end">
         <label class="form-label text-center text-lg-end" for="name">Name:</label>        
     </div>
-    <div class="col-12 col-sm-9 col-lg-6 d-inline-block mb-3">
+    <div class="col-12 col-sm-9 col-md-7 col-lg-8 d-inline-block mb-3">
         <input class="form-control" type="text" name="name" id="name" value="{{ fields.name }}{{ product.name }}" placeholder="Product name" required>
     </div>
 
 
     <!-- Description -->
 
-    <div class="col-12 col-lg-4 d-inline-block text-center text-lg-end">
+    <div class="col-12 col-md-4 col-lg-3 d-inline-block text-center text-md-end">
         <label class="col-form-label text-center text-lg-end" for="description">Description:</label>        
     </div>
-    <div class="col-12 col-lg-6 d-inline-block">
+    <div class="col-12 col-md-7 col-lg-8 d-inline-block">
         <textarea class="form-control" name="description" id="description" cols="30" rows="10" placeholder="Product description" required>{{ fields.description }}{{ product.description }}</textarea>      
     </div>
 
 
     <!-- Price -->
 
-    <div class="col-5 col-lg-4 d-inline-block text-end">
+    <div class="col-5 col-md-4 col-lg-3 d-inline-block text-end">
         <label class="col-form-label text-center text-lg-end" for="price">Price:</label>       
     </div>       
-    <div class="col-6 col-lg-6 d-inline-block mb-3">
+    <div class="col-6 col-md-7 col-lg-8 d-inline-block mb-3">
         <input class="form-control" type="text" name="price" id="price" value="{{ fields.price }}{{ product.price }}" placeholder="0.00" required>
     </div> 
 
 
     <!-- Category -->
 
-    <div class="col-5 col-lg-4 d-inline-block text-end">
+    <div class="col-12 col-sm-5 col-md-4 col-lg-3 d-inline-block text-center text-sm-end">
         <label class="col-form-label text-center text-lg-end" for="category">Category:</label>       
     </div> 
-    <div class="col-6 col-lg-6 d-inline-block mb-3">
+    <div class="col-12 col-sm-6 col-md-7 col-lg-8 d-inline-block mb-3 text-center text-sm-start">
         <select name="category" id="category" required>
             <option value="{% if product.category is defined %}{{ product.id_category }}{% endif %}">
                 {% if product.category is defined %}
@@ -52,18 +52,18 @@
 
     <!-- Upload image -->
 
-    <div class="col-12 col-lg-4 d-inline-block text-center text-lg-end">
+    <div class="col-12 col-md-4 col-lg-3 d-inline-block text-center text-md-end">
         <input type="hidden" name="MAX_FILE_SIZE" value="1000000" />
         <label class="col-form-label text-center text-lg-end" for="image">Select image:</label>       
     </div> 
-    <div class="col-sm-12 col-lg-6 d-inline-block mb-3">
+    <div class="col-sm-12 col-md-7 col-lg-8 d-inline-block mb-3">
         <input class="form-control" type="file" name="image" id="image">
     </div>  
     
-    <div class="col-sm-12 col-lg-4 d-inline-block text-sm-center text-lg-end">
+    <div class="col-sm-12 col-md-4 col-lg-3 d-inline-block">
                      
     </div>       
-    <div class="col-sm-12 col-lg-6 d-inline-block">
+    <div class="col-sm-12 col-md-7 col-lg-8 d-inline-block">
         <button class="btn btn-outline-secondary" type="submit">{{ button_label|default('New Product') }}</button>        
     </div>
 </form>
