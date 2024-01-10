@@ -203,6 +203,15 @@ figcaption {
 	.products figure {
 		height: 13em;
 	}
+
+	.show-product a, .show-product form {
+		width: 100%;
+		margin-bottom: 0.5em;		
+	}
+
+	.show-product button {
+		width: 100%;
+	}
 	
 }
 
