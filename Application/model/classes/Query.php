@@ -93,7 +93,7 @@
             }
         }
 
-        public function updateRegistry(string $table, array $fields, $id, object $dbcon): void
+        public function updateRegistry(string $table, array $fields, string $tableIdName, string $id, object $dbcon): void
         {
             $query = "UPDATE $table SET";
             $params = [];                        
@@ -104,10 +104,8 @@
             }            
             
             $query = rtrim($query, ",");
-            $query .= " WHERE id = :id";
-            $params[":id"] = $id;  
-            
-            dump($params);
+            $query .= " WHERE $tableIdName = :id";
+            $params[":id"] = $id;                         
                                                   
             try {
                 $stm = $dbcon->pdo->prepare($query);                        
