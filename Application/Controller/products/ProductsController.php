@@ -10,7 +10,7 @@
     {
         public function __construct(
             private array $products = [],
-            private $categories = [],
+            private array $categories = [],
             private object $dbcon = DB_CON
         ) 
         {
