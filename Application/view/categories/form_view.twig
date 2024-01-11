@@ -1,11 +1,11 @@
-<form action="{% if category is defined %} /categoroy/edit/{{ category.id }} {% else %} /category/new {% endif %}" method="post">
+<form action="{% if category is defined %} /category/edit/{{ category.id_category }} {% else %} /category/new {% endif %}" method="post">
     <!-- Name -->
 
     <div class="col-12 col-sm-2 col-md-4 col-lg-3 d-inline-block text-center text-md-end">
         <label class="form-label text-center text-lg-end" for="name">Name:</label>        
     </div>
     <div class="col-12 col-sm-9 col-md-7 col-lg-8 d-inline-block mb-3">
-        <input class="form-control" type="text" name="name" id="name" value="" placeholder="Category name" required>
+        <input class="form-control" type="text" name="name" id="name" value="{{ category.category }}" placeholder="Category name" required>
     </div>                                        
     
     <div class="col-sm-12 col-md-4 col-lg-3 d-inline-block">

@@ -99,6 +99,61 @@
             }
         }
 
+        /** Edit category */
+        public function edit(string $id = "") : void {
+            try {
+                $query = new Query;
+                $validate = new Validate;
+
+                $category = $query->selectOneBy('category', 'id_category', $id, $this->dbcon);  
+                
+                if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                    $fields = [
+                        'category' => $validate->test_input($_POST['name']),
+                    ];                                         
+
+                    if($validate->validate_form($fields)) {
+                        $query->updateRegistry('category', $fields, 'id_category', $id, $this->dbcon);
+
+                        $this->categories = $query->selectAll('category', $this->dbcon);
+
+                        $this->render('categories/index_view.twig', [
+                            'menus'     =>    $this->showNavLinks(),
+                            'session'   =>    $_SESSION,
+                            'active'    =>    'administration',
+                            'categories'=>    $this->categories,
+                            'message'   =>    "Category updated successfully",                    
+                        ]);
+                    }
+                }
+
+                $this->render('categories/edit_view.twig', [
+                    'menus'     =>    $this->showNavLinks(),
+                    'session'   =>    $_SESSION,
+                    'active'    =>    'administration',
+                    'category'  =>    $category,
+                ]);
+
+            } catch (\Throwable $th) {
+                $error_msg = [
+                    'Error:' =>  $th->getMessage(),
+                ];
+
+                if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
+                    $error_msg = [
+                        "Message:"  =>  $th->getMessage(),
+                        "Path:"     =>  $th->getFile(),
+                        "Line:"     =>  $th->getLine(),
+                    ];
+                }
+
+                $this->render('error_view.twig', [
+                    'menus'             => $this->showNavLinks(),
+                    'exception_message' => $error_msg,                
+                ]);
+            }
+        }
+
         /** Delete a category */
         public function delete(string $id = "") : void {
             try {

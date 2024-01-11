@@ -350,7 +350,7 @@
                             ];                                                  
                         }
 
-                        $query->updateRegistry('products', $fields, $id, $this->dbcon);
+                        $query->updateRegistry('products', $fields, 'id', $id, $this->dbcon);
 
                         $this->render('products/new_product_view.twig', [
                             'menus'     =>    $this->showNavLinks(),

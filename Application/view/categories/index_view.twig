@@ -12,7 +12,7 @@
             {% for category in categories %}
                 <tr>
                     <td>{{ category.category|capitalize }}</td>
-                    <td><a href="#">Edit</a></td>
+                    <td><a href="/category/edit/{{ category.id_category }}">Edit</a></td>
                     <td>
                         {{ include('categories/delete_form.twig') }}
                     </td>                                                            
