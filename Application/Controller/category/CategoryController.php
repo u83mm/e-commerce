@@ -12,6 +12,7 @@
             
         }
 
+        /** Retrieves categories from the database and renders them in a view. */
         public function index() : void {
             try {                
                 $query = new Query;
@@ -44,8 +45,14 @@
             }                   
         }
 
+        /** Create a new category */
         public function new() : void {
             try {
+                // Test for authorized access
+                if(!$this->testAccess(['ROLE_ADMIN'])) {
+                    throw new Exception("Unauthorized access!", 1);
+                }
+
                 $query = new Query;
                 $validate = new Validate;
 
@@ -70,6 +77,47 @@
                     'menus'     =>    $this->showNavLinks(),
                     'session'   =>    $_SESSION,
                     'active'    =>    'administration',                    
+                ]);
+
+            } catch (\Throwable $th) {
+                $error_msg = [
+                    'Error:' =>  $th->getMessage(),
+                ];
+
+                if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
+                    $error_msg = [
+                        "Message:"  =>  $th->getMessage(),
+                        "Path:"     =>  $th->getFile(),
+                        "Line:"     =>  $th->getLine(),
+                    ];
+                }
+
+                $this->render('error_view.twig', [
+                    'menus'             => $this->showNavLinks(),
+                    'exception_message' => $error_msg,                
+                ]);
+            }
+        }
+
+        /** Delete a category */
+        public function delete(string $id = "") : void {
+            try {
+                // Test for authorized access
+                if(!$this->testAccess(['ROLE_ADMIN'])) {
+                    throw new Exception("Unauthorized access!", 1);
+                }
+                
+                if(empty($id)) throw new Exception("There are any category to delete.", 1);
+
+                $query = new Query;                
+
+                $query->deleteRegistry('category', 'id_category', $id, $this->dbcon);
+
+                $this->render('categories/index_view.twig', [
+                    'menus'     =>    $this->showNavLinks(),
+                    'session'   =>    $_SESSION,
+                    'active'    =>    'administration',
+                    'message'   =>    "Category deleted successfully!",                    
                 ]);
 
             } catch (\Throwable $th) {

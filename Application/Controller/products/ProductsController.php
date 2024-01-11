@@ -413,7 +413,7 @@
                     'menus'     =>    $this->showNavLinks(),
                     'session'   =>    $_SESSION,
                     'active'    =>    'home',                                                
-                    'message'   =>    "Product delected successfully!",
+                    'message'   =>    "Product deleted successfully!",
                 ]); 
 
             } catch (\Throwable $th) {

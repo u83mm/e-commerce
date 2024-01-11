@@ -7,12 +7,18 @@
 {% block main %}
     <h3 class="text-center">Categories Index</h3>
     <section class="row">
-        <fieldset class="col-8 mx-auto rounded shadow">
-            <ul>
+        <fieldset class="col-sm-12 col-md-7 col-lg-6 mx-auto rounded shadow">
+            <table class="table table-bordered">
             {% for category in categories %}
-                <li>{{ category.category|capitalize }}</li>
+                <tr>
+                    <td>{{ category.category|capitalize }}</td>
+                    <td><a href="#">Edit</a></td>
+                    <td>
+                        {{ include('categories/delete_form.twig') }}
+                    </td>                                                            
+                </tr>
             {% endfor %}
-            </ul>
+            </table>
         </fieldset>
     </section>
 {% endblock main %}
