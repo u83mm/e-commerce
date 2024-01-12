@@ -4,27 +4,30 @@
     E-commerce | Categories
 {% endblock title %}
 
-{% block main %}
-    <h3 class="text-center">Categories Index</h3>
+{% block main %}    
     <section class="row">
-        <fieldset class="col-sm-12 col-md-7 col-lg-6 mx-auto rounded shadow table-responsive">
+        <fieldset class="col-sm-12 col-md-8 col-lg-7 mx-auto rounded shadow table-responsive p-3">
+            <h3 class="text-center">Categories Index</h3>
             <table class="table table-bordered table-striped">
-                <tbody>
+                <thead>
                     <tr>
                         <th class="text-center">Category name</th>
-                        <th class="text-center" colspan="2">Options</th>
+                        <th class="text-center">Options</th>
                     </tr>
+                </thead>
+                <tbody>
                 {% for category in categories %}
                     <tr>
                         <td>{{ category.category|capitalize }}</td>
                         <td>
-                            <a class="btn btn-outline-success d-inline-block mb-1 mb-md-0" href="/category/edit/{{ category.id_category }}">Edit</a>
+                            <a class="btn btn-outline-success d-inline-block mb-1 mb-sm-0" href="/category/edit/{{ category.id_category }}">Edit</a>
                             {{ include('categories/delete_form.twig') }}
                         </td>                                                                              
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
+            <a class="btn btn-outline-primary" href="/category/new">Add Category</a>
         </fieldset>
     </section>
 {% endblock main %}
