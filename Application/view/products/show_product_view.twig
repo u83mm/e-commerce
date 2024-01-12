@@ -15,6 +15,7 @@
             <p>{{ product.description|nl2br }}</p>
             {% set currency = '€' %}
             <p>Price: {{ product.price ~ "%s"|format(currency) }}</p>
+            <p>Category: {{ product.category|capitalize }}</p>
             <a class="btn btn-outline-primary" href="#">Add to cart</a>
             {% if session.role == 'ROLE_ADMIN' %}
                 <a class="btn btn-outline-primary" href="/products/edit/{{ product.id }}">Edit product</a>
