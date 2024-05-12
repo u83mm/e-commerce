@@ -7,7 +7,7 @@
 
     class CategoryController extends Controller
     {
-        public function __construct(private array $categories = [], private object $dbcon = DB_CON)
+        public function __construct(private array $categories = [])
         {
             
         }
@@ -17,7 +17,7 @@
             try {                
                 $query = new Query;
 
-                $this->categories = $query->selectAll('category', $this->dbcon);                
+                $this->categories = $query->selectAll('category');                
 
                 $this->render('categories/index_view.twig', [
                     'menus'     =>    $this->showNavLinks(),
@@ -62,7 +62,7 @@
                     ];
 
                     if($validate->validate_form($fields)) {
-                        $query->insertInto('category', $fields, $this->dbcon);
+                        $query->insertInto('category', $fields);
 
                         $this->render('categories/new_category_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
@@ -105,7 +105,7 @@
                 $query = new Query;
                 $validate = new Validate;
 
-                $category = $query->selectOneBy('category', 'id_category', $id, $this->dbcon);  
+                $category = $query->selectOneBy('category', 'id_category', $id);  
                 
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $fields = [
@@ -113,9 +113,9 @@
                     ];                                         
 
                     if($validate->validate_form($fields)) {
-                        $query->updateRegistry('category', $fields, 'id_category', $id, $this->dbcon);
+                        $query->updateRegistry('category', $fields, 'id_category', $id);
 
-                        $this->categories = $query->selectAll('category', $this->dbcon);
+                        $this->categories = $query->selectAll('category');
 
                         $this->render('categories/index_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
@@ -166,7 +166,7 @@
 
                 $query = new Query;                
 
-                $query->deleteRegistry('category', 'id_category', $id, $this->dbcon);
+                $query->deleteRegistry('category', 'id_category', $id);
 
                 $this->render('categories/index_view.twig', [
                     'menus'     =>    $this->showNavLinks(),

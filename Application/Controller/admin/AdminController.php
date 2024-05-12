@@ -4,11 +4,7 @@
     use App\Core\Controller;
 
     class AdminController extends Controller
-    {
-        public function __construct(private object $dbcon = DB_CON) {
-            
-        }
-
+    {        
         public function index(): void {           
             try {
                 // Test for authorized access
