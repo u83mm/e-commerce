@@ -9,6 +9,11 @@
     {
     	use NavLinks;
     	use AccessControl;
+
+        public function __construct(protected object $dbcon = DB_CON)
+        {
+            
+        }
     	
         /** Properties to use twig */
         private object $loader;

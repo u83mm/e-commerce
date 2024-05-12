@@ -5,12 +5,7 @@
     use model\classes\Validate;
 
     class LoginController extends Controller
-    {        
-        public function __construct(private object $dbcon = DB_CON)
-        {
-
-        }
-
+    {               
         public function index(): void
         { 
             $validate = new Validate;

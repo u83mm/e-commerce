@@ -1,19 +1,20 @@
 <?php
     namespace model\classes;
 
+    use App\Core\Controller;
     use PDO;
 
-    class Query 
+    class Query extends Controller
     {
         /**
          * Select all from "table name"
          */
-        public function selectAll(string $table, object $dbcon): array     
+        public function selectAll(string $table): array     
         {
             $query = "SELECT * FROM $table";                 
 
             try {
-                $stm = $dbcon->pdo->prepare($query);               
+                $stm = $this->dbcon->pdo->prepare($query);               
                 $stm->execute();       
                 $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
                 $stm->closeCursor();                
@@ -75,12 +76,12 @@
             }
         }
 
-        public function selectOneBy(string $table, string $field, string $value, object $dbcon): array|bool  
+        public function selectOneBy(string $table, string $field, string $value): array|bool  
         {
             $query = "SELECT * FROM $table WHERE $field = :val";                         
 
             try {
-                $stm = $dbcon->pdo->prepare($query);
+                $stm = $this->dbcon->pdo->prepare($query);
                 $stm->bindValue(":val", $value);                            
                 $stm->execute();       
                 $rows = $stm->fetch(PDO::FETCH_ASSOC);
@@ -93,7 +94,7 @@
             }
         }
 
-        public function updateRegistry(string $table, array $fields, string $tableIdName, string $id, object $dbcon): void
+        public function updateRegistry(string $table, array $fields, string $tableIdName, string $id): void
         {
             $query = "UPDATE $table SET";
             $params = [];                        
@@ -108,7 +109,7 @@
             $params[":id"] = $id;                         
                                                   
             try {
-                $stm = $dbcon->pdo->prepare($query);                        
+                $stm = $this->dbcon->pdo->prepare($query);                        
                 $stm->execute($params);       				
                 $stm->closeCursor();
                 $dbcon = null;
@@ -135,12 +136,12 @@
             }           
         }
 
-        public function deleteRegistry(string $table, string $fieldId, string $id, object $dbcon)
+        public function deleteRegistry(string $table, string $fieldId, string $id)
         {
             $query = "DELETE FROM $table WHERE $fieldId = :id";                 
 
             try {
-                $stm = $dbcon->pdo->prepare($query);             			            
+                $stm = $this->dbcon->pdo->prepare($query);             			            
                 $stm->bindValue(":id", $id);              
                 $stm->execute();       				
                 $stm->closeCursor();
@@ -154,7 +155,7 @@
         /**
          * Select one registry by their "id" doing JOIN with another table by their foreign key
          */
-        public function selectOneByIdInnerjoinOnfield(string $table1, string $table2, string $foreignKeyField, string $fieldId, string $id, object $dbcon):array
+        public function selectOneByIdInnerjoinOnfield(string $table1, string $table2, string $foreignKeyField, string $fieldId, string $id):array
         {
             $query = "SELECT * FROM $table1 
                         INNER JOIN $table2
@@ -162,7 +163,7 @@
                         WHERE $table1.$fieldId = :id";
                     
             try {
-                $stm = $dbcon->pdo->prepare($query);
+                $stm = $this->dbcon->pdo->prepare($query);
                 $stm->bindValue(":id", $id);                            
                 $stm->execute();       
                 $rows = $stm->fetch(PDO::FETCH_ASSOC);            
@@ -213,7 +214,7 @@
       * @param string table The table name
       * @param object dbcon The database connection object.
       */
-        public function insertInto(string $table, array $fields, object $dbcon): void
+        public function insertInto(string $table, array $fields): void
         {
             /** Initialice variables */
             $query = $values = "";
@@ -234,7 +235,7 @@
             $query = $insert . $values;            
                                                     
             try {
-                $stm = $dbcon->pdo->prepare($query);
+                $stm = $this->dbcon->pdo->prepare($query);
                 foreach ($fields as $key => $value) {
                     if($key === 'password') {
                         $stm->bindValue(":password", password_hash($value, PASSWORD_DEFAULT));

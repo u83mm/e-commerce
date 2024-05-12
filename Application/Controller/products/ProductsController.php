@@ -10,8 +10,7 @@
     {
         public function __construct(
             private array $products = [],
-            private array $categories = [],
-            private object $dbcon = DB_CON
+            private array $categories = [],            
         ) 
         {
 
@@ -23,7 +22,7 @@
                 $query = new Query;
 
                 // We obtain all products from DB
-                $this->products = $query->selectAll('products', $this->dbcon);
+                $this->products = $query->selectAll('products');
 
                 if (!$this->products) {
                     $this->render('products/index_view.twig', [
@@ -76,7 +75,7 @@
                 $query = new Query;
 
                 // Get all categories
-                $this->categories = $query->selectAll('category', $this->dbcon);                
+                $this->categories = $query->selectAll('category');                
 
                 // If form is send and is valid
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -155,7 +154,7 @@
                         // Insert data in DB                        
                         $fields['image'] = $commonTask->getWebPath($upload_filename);
 
-                        $query->insertInto('products', $fields, $this->dbcon);
+                        $query->insertInto('products', $fields);
 
                         $this->render('products/new_product_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
@@ -214,7 +213,7 @@
                 $query = new Query;
                 $commonTask = new CommonTasks;
 
-                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id, $this->dbcon);                                                
+                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id);                                                
                 
                 $this->render('products/show_product_view.twig', [
                     'menus'     =>  $this->showNavLinks(),
@@ -259,10 +258,10 @@
                 $validate = new Validate;
                 $commonTask = new CommonTasks;
 
-                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id, $this->dbcon);
+                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id);
                 
                 // Get all categories
-                $this->categories = $query->selectAll('category', $this->dbcon);
+                $this->categories = $query->selectAll('category');
                 
                 // Update product                
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -350,7 +349,7 @@
                             ];                                                  
                         }
 
-                        $query->updateRegistry('products', $fields, 'id', $id, $this->dbcon);
+                        $query->updateRegistry('products', $fields, 'id', $id);
 
                         $this->render('products/new_product_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
@@ -404,9 +403,9 @@
                 $commonTask = new CommonTasks;
 
                 // Get product to delete
-                $product = $query->selectOneBy('products', 'id', $id, $this->dbcon);
+                $product = $query->selectOneBy('products', 'id', $id);
 
-                $query->deleteRegistry('products', 'id', $id, $this->dbcon);
+                $query->deleteRegistry('products', 'id', $id);
                 $commonTask->deletePicture($product['image']);
 
                 $this->render('products/index_view.twig', [

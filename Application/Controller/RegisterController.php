@@ -6,10 +6,6 @@
 
     class RegisterController extends Controller 
     {
-        public function __construct(private object $dbcon = DB_CON) {
-            $this->dbcon = $dbcon;
-        }
-
         /** Show register view */
         public function index(): void {
             try {
