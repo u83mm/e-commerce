@@ -1,6 +1,8 @@
 <?php
 
     use App\Core\Controller;
+    use Application\model\User;
+    use Application\Repository\UserRepository;
     use model\classes\Query;
     use model\classes\Validate;
 
@@ -41,54 +43,63 @@
             $query = new Query;             
                         
             try {                                
-                if($_SERVER['REQUEST_METHOD'] == 'POST') { 
-                    
+                if($_SERVER['REQUEST_METHOD'] == 'POST') {                     
                     // Get values from register form                  
                     $fields = [
-                        'user_name' =>  $validate->test_input(strtolower($_REQUEST['user_name'])),
-                        'email'     =>  $validate->validate_email($_REQUEST['email']) ? $validate->test_input(strtolower($_REQUEST['email'])): null,
-                        'password'  =>  $_REQUEST['password'] === $_REQUEST['repeat_password'] ? $validate->test_input($_REQUEST['password']) : "",
-                    ];                    
+                        'userName'          =>  $validate->test_input(strtolower($_REQUEST['user_name'])),
+                        'email'             =>  $validate->test_input(strtolower($_REQUEST['email'])),
+                        'password'          =>  $validate->test_input($_REQUEST['password']),
+                        'repeatPassword'    =>  $validate->test_input($_REQUEST['repeat_password']),
+                    ]; 
                     
-                    // Test if the e-mail is in use by other user
-                    $result = $query->selectOneBy('users', 'email', $fields['email'], $this->dbcon);                    
+                    if($validate->validate_form($fields)) {
+                        // Test if the e-mail is in use by other user
+                        $result = $query->selectOneBy('users', 'email', $fields['email']);
 
-                    if($result) {
-                        $this->render('register/register_view.twig', [
-                            'error_message' =>  'The user is already in use.',
+                        if($result) {
+                            $data = [
+                                'error_message' =>  'The email is already in use.',
+                                'fields'        =>  $fields,
+                                'menus'         =>  $this->showNavLinks(),
+                                'active'        =>  'registration',
+                            ];
+                        }
+                        else {
+                            // Test if passwords are equals
+                            if($fields['password'] != $_REQUEST['repeat_password']) {                                
+    
+                                $data = [
+                                    'menus'             =>  $this->showNavLinks(),
+                                    'error_message'     =>  "Passwords are not equals", 
+                                    'fields'            =>  $fields,                                    
+                                    'active'            =>  'registration',
+                                ];                        
+                            }
+                            else {
+                                // Register the user
+                                $user = new User($fields);
+                                $userRepository = new UserRepository();
+
+                                $userRepository->save($user);
+    
+                                $data = [
+                                    'menus'         =>  $this->showNavLinks(),
+                                    'message'       =>  "User registered successfully",
+                                    'active'        =>  'registration', 
+                                ];
+                            }
+                        } 
+                    }
+                    else {
+                        $data = [
+                            'error_message' =>  $validate->get_msg(),
                             'fields'        =>  $fields,
                             'menus'         =>  $this->showNavLinks(),
                             'active'        =>  'registration',
-                        ]);
+                        ];
                     }
-                    else {
-                        // Test if passwords are equals
-                        if(empty($fields['password'])) {
-                            $fields['password'] = $validate->test_input($_REQUEST['password']);
-
-                            $this->render('register/register_view.twig', [
-                                'menus'         =>  $this->showNavLinks(),
-                                'error_message' =>  "Passwords are not equals", 
-                                'fields'        =>  $fields,
-                                'active'        =>  'registration',              
-                            ]);                         
-                        }
-                        else {
-                            // Validate form
-                            $ok = $validate->validate_form($fields);
-                            
-                            if($ok) {                        
-                                // Register the user
-                                $query->insertInto('users', $fields, $this->dbcon);
-    
-                                $this->render('register/register_view.twig', [
-                                    'menus'         =>  $this->showNavLinks(),
-                                    'message'       =>  "User registered successfully",
-                                    'active'        =>  'registration',                                                  
-                                ]);                                                
-                            } 
-                        }
-                    }                                                                                                                                                                          
+                                                            
+                    $this->render('register/register_view.twig', $data);                                                                                                                                                                                             
                 }
                 else {
                     throw new Exception("Service unavailable", 1);                    

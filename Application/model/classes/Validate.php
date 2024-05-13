@@ -46,8 +46,13 @@
         {                                         
             foreach ($fields as $key => $value) {
                 if (empty($value) || !isset($value)) {                                                              
-                    $this->msg .= "'" . ucfirst($key) . "' is a required field.";  
+                    $this->msg = "'" . ucfirst($key) . "' is a required field.";  
                     return false;                                   				
+                }
+
+                if($key === "email" && !$this->validate_email($value)) {
+                    $this->msg = "Insert a valid e-mail.";
+                    return false;
                 }
             }
                       

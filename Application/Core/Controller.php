@@ -41,7 +41,8 @@
         )
         {   
             $this->loader = new \Twig\Loader\FilesystemLoader(SITE_ROOT . '/../Application/view');
-            $this->twig = new \Twig\Environment($this->loader);         
+            $this->twig = new \Twig\Environment($this->loader); 
+                    
             foreach ($parameters as $key => $value) {
                 $parameters[$key] = $value;
             }

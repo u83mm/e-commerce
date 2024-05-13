@@ -211,8 +211,7 @@
       * > This function inserts a record into a table
       * 
       * @param array fields an array of fields to be inserted into the database.
-      * @param string table The table name
-      * @param object dbcon The database connection object.
+      * @param string table The table name you want to insert into.
       */
         public function insertInto(string $table, array $fields): void
         {
