@@ -5,11 +5,6 @@
     class ErrorController extends Controller
     {        
 
-        public function __construct(private object $dbcon = DB_CON)
-        {                                   
-
-        }
-
         public function index()
         {  
             try {
