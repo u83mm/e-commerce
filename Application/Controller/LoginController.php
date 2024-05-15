@@ -5,7 +5,7 @@
     use model\classes\Validate;
 
     class LoginController extends Controller
-    {               
+    {        
         public function index(): void
         { 
             $validate = new Validate;
@@ -15,17 +15,15 @@
                 if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Get values from login form
                     $fields = [
-                        'email'     =>  $validate->validate_email(strtolower($_REQUEST['email'])) ? $validate->test_input(strtolower($_REQUEST['email'])) : "",
-                        'password'  =>  $validate->test_input($_REQUEST['password']) ?? "",
+                        'email'     =>  $validate->test_input(strtolower($_REQUEST['email'])),
+                        'password'  =>  $validate->test_input($_REQUEST['password']),
                     ];
 
-                    // Validate form
-                    $ok = $validate->validate_form($fields);
-
-                    if($ok) {
+                    // Validate form                    
+                    if($validate->validate_form($fields)) {
                         if(!isset($_SESSION['id_user'])) {
                             // Test user to do login                           
-                            $result = $query->selectLoginUser('users', 'roles', 'id_role', $fields['email'], $this->dbcon);                                                       
+                            $result = $query->selectLoginUser('users', 'roles', 'id_role', $fields['email']);                                                       
                                                         
                             if($result) {                                
                                 if(password_verify($fields['password'], $result['password'])) {												
@@ -67,11 +65,19 @@
                             ]);	
                         }
                     }
-                }                                                                               
+                    else {                                               
+                        $this->render('login/login_view.twig', [
+                            'menus'         =>  $this->showNavLinks(),
+                            'active'        =>  'login',
+                            'error_message' =>  $validate->get_msg(),
+                            'fields'        =>  $fields,             
+                        ]);
+                    }
+                }                                                                                              
 
                 $this->render('login/login_view.twig', [
-                    'menus'     => $this->showNavLinks(),
-                    'active'    =>  'login',                
+                    'menus'     =>  $this->showNavLinks(),
+                    'active'    =>  'login',                                                   
                 ]);
 
             } catch (\Throwable $th) {

@@ -305,7 +305,7 @@
         }
         
         /** Test user to do login */
-        public function selectLoginUser(string $table1, string $table2, string $foreignKeyField, string $email, object $dbcon): array|null
+        public function selectLoginUser(string $table1, string $table2, string $foreignKeyField, string $email): array|null
         {
             $query = "SELECT * FROM $table1 
                         INNER JOIN $table2 
@@ -313,7 +313,7 @@
                         WHERE $table1.email = :val";                                    
                 
             try {
-                $stm = $dbcon->pdo->prepare($query);                                                   
+                $stm = $this->dbcon->pdo->prepare($query);                                                   
                 $stm->execute([$email]);       
                 $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
                 $stm->closeCursor();
