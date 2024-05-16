@@ -218,6 +218,18 @@ figcaption {
 	margin-top: 0
 }
 
+.legalTermsDiv {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	align-content: center;
+}
+
+.legalTerms {
+	font-size: 0.7em;
+}
+
+
 
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
