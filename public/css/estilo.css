@@ -85,6 +85,10 @@ p{
 	margin-bottom: 1em;
 }
 
+a {
+	text-decoration: none;
+}
+
 td {
 	text-align: center;
 	padding: 0.5em;
@@ -203,9 +207,8 @@ figcaption {
 	margin-top: 3em;
 }
 
-.credentials p, a {
-	font-size: 0.7em;
-	text-decoration: none;
+.credentials p, .credentials a {
+	font-size: 0.7em;	
 }
 
 .credentials input[type="submit"], button[type="submit"] {
