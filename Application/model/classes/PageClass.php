@@ -1,7 +1,9 @@
 <?php
-	namespace model\classes;		
+	namespace model\classes;
 
-	class PageClass {
+	use App\Core\Controller;
+
+	class PageClass extends Controller {
 		public function __construct(
 			public string $title = "Aquí va el title",
 			public string $h1 = "Aquí va el H1",
@@ -12,12 +14,11 @@
 				"Registration"		=> 	"/",				
 				"Login "			=> 	"/",],
 		)
-		{			
-			$links = new NavLinks();
+		{						
 
 			/** Configure menus by ROLE */			
-			if (isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN')	$this->nav_links = $links->admin();			
-			if (isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_USER') $this->nav_links = $links->user();
+			if (isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN')	$this->nav_links = $this->admin();			
+			if (isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_USER') $this->nav_links = $this->user();
 
 			if (isset($_SESSION['id_user'])) {
 				array_pop($this->nav_links);
