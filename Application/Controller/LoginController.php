@@ -1,4 +1,5 @@
 <?php
+    declare(strict_types = 1);
 
     use App\Core\Controller;
     use model\classes\Query;
@@ -12,6 +13,11 @@
             $query = new Query;
 
             try {
+                if(isset($_SESSION['id_user'])) {
+                    header('Location: /');
+                    die();
+                }
+
                 if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Get values from login form
                     $fields = [
@@ -44,9 +50,7 @@
                                         'fields'        =>  $fields,
                                         'active'        =>  'login',                   
                                     ]);
-                                }
-                                
-                                exit();
+                                }                                                                
                             }
                             else {
                                 $this->render('login/login_view.twig', [
@@ -55,8 +59,7 @@
                                     'fields'        =>  $fields, 
                                     'active'        =>  'login',                
                                 ]);
-                            }
-                            exit();
+                            }                            
                         }
                         else {
                             $this->render('main_view.twig', [
@@ -100,4 +103,4 @@
             }                                             
         }        
     }    
-?>  
+?>
