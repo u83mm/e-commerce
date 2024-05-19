@@ -50,7 +50,8 @@
                         'email'             =>  $validate->test_input(strtolower($_REQUEST['email'])),
                         'password'          =>  $validate->test_input($_REQUEST['password']),
                         'repeatPassword'    =>  $validate->test_input($_REQUEST['repeat_password']),
-                    ]; 
+                        'terms'             =>  isset($_REQUEST['terms']) ? $validate->test_input($_REQUEST['terms']) : "",
+                    ];                     
                     
                     if($validate->validate_form($fields)) {
                         // Test if the e-mail is in use by other user
@@ -66,8 +67,7 @@
                         }
                         else {
                             // Test if passwords are equals
-                            if($fields['password'] != $_REQUEST['repeat_password']) {                                
-    
+                            if($fields['password'] != $_REQUEST['repeat_password']) {                                    
                                 $data = [
                                     'menus'             =>  $this->showNavLinks(),
                                     'error_message'     =>  "Passwords are not equals", 
@@ -76,7 +76,9 @@
                                 ];                        
                             }
                             else {
-                                // Register the user
+                                // Save the user
+                                array_pop($fields); 
+                                                               
                                 $user = new User($fields);
                                 $userRepository = new UserRepository();
 
@@ -90,7 +92,7 @@
                             }
                         } 
                     }
-                    else {
+                    else {                        
                         $data = [
                             'error_message' =>  $validate->get_msg(),
                             'fields'        =>  $fields,
