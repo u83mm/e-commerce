@@ -20,7 +20,7 @@
             {% if session.role == 'ROLE_ADMIN' %}
                 <a class="btn btn-outline-primary" href="/products/edit/{{ product.id }}">Edit product</a>
                 {{ include('products/delete_form.twig') }}
-                <a class="btn btn-outline-secondary" href="/products">Volver</a>
+                <a class="btn btn-outline-secondary mt-md-2 mt-lg-0" href="/products">Volver</a>
             {% endif %}
         </article>
     </section>    

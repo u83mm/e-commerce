@@ -211,7 +211,7 @@ figcaption {
 	font-size: 0.7em;	
 }
 
-.credentials input[type="submit"], button[type="submit"] {
+.credentials input[type="submit"], .credentials button[type="submit"] {
 	border-radius: 1.5em;
 	border: 1px solid gray;
 	width: 80%;
