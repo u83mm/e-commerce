@@ -154,7 +154,9 @@ sup {
 }
 
 input[type=number] {
-	appearance: textfield;
+	/* appearance: textfield; */
+	width: 4em;
+	display: inline-block;
 }
 
 select {

@@ -58,6 +58,14 @@
 			{% endblock %}		
 			<main class="pt-3 pb-3">
 				{% if session.user_name is defined %}
+					<div class="row">
+						<div class="col-12 text-end pe-5">
+							<a href="/cart" class="text-decoration-none">
+								<img src="/images/shopping-cart.svg" height="20" alt="shopping-cart">
+								<span>({{ session.cart|length }})</span>
+							</a>							
+						</div>						
+					</div>					
 					<p class="text-end pe-3">Logged as {{ session.user_name|capitalize }}</p>
 				{% endif %}
 				
