@@ -5,10 +5,10 @@
 
     class User
     {
-        private ?string $user_name = null;
-        private ?string $email = null;
-        private ?string $password = null;
-        private ?int $role = null;
+        private ?string $user_name  = null;
+        private ?string $email      = null;
+        private ?string $password   = null;
+        private ?int    $role       = null;
 
         public function __construct(            
             private array $fields                       
