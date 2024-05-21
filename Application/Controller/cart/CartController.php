@@ -2,6 +2,7 @@
     declare(strict_types=1);
 
     use App\Core\Controller;
+    use Application\model\Product;
     use model\classes\Query;
     use model\classes\Validate;
 
@@ -68,8 +69,8 @@
                         'quantity'   => $validate->test_input($_POST['quantity']),
                     ];
 
-                    $product = $query->selectOneBy('products', 'id', $fields['product_id']);
-                    $product['quantity'] = $fields['quantity'];                    
+                    $product = new Product($query->selectOneBy('products', 'id', $fields['product_id']));
+                    $product->setQty($fields['quantity']);                                        
 
                     if($validate->validate_form($fields)) {                                              
                         $_SESSION['cart'][] = $product;                      
