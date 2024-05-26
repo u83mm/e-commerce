@@ -5,6 +5,7 @@
 
     class Product
     {
+        private ?int    $id          = null;
         private ?string $name        = null;
         private ?string $description = null;
         private ?int    $id_category = null;        
@@ -12,8 +13,15 @@
         private ?float  $price       = null;
         private ?int    $qty         = null;
         public function __construct(
-            private array $fields
+            private array $fields = []
         )
+        {
+            if(!empty($this->fields)) {
+                $this->setProduct($this->fields);
+            }
+        }
+
+        public function setProduct(array $fields): self
         {
             if(!empty($fields)) {
                 foreach($fields as $key => $value) {
@@ -23,6 +31,13 @@
                     }
                 }
             }
+            return $this;
+        }
+
+        public function setId(int $id): self
+        {
+            $this->id = $id;
+            return $this;
         }
 
         public function setName(string $name): self
@@ -37,7 +52,7 @@
             return $this;
         }
 
-        public function setIdCategory(int $id_category): self
+        public function setId_category(int $id_category): self
         {
             $this->id_category = $id_category;
             return $this;
@@ -59,6 +74,11 @@
         {
             $this->qty = intval($qty);
             return $this;
+        }
+
+        public function getId(): int
+        {
+            return $this->id;
         }
 
         public function getName(): string
