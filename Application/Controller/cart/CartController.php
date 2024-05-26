@@ -8,7 +8,7 @@
 
     class CartController extends Controller
     {
-        
+        private string $message = "";
         public function index()
         {              
             try {
@@ -19,13 +19,24 @@
                 ])) {
                     header('Location: /login');
                     die;
-                }
+                }                                  
 
-                $this->render('cart/index_view.twig', [
-                    'menus'         =>  $this->showNavLinks(),
-                    'session'       =>  $_SESSION,                        
-                    'active'        =>  'catalog'
-                ]);
+                if(isset($_SESSION['cart'])) {                                                       
+                    $this->render('cart/index_view.twig', [
+                        'menus'         =>  $this->showNavLinks(),
+                        'session'       =>  $_SESSION,                        
+                        'active'        =>  'catalog', 
+                        'products'      =>  $_SESSION['cart']                    
+                    ]);
+                }
+                else {
+                    $this->render('cart/index_view.twig', [
+                        'menus'          =>  $this->showNavLinks(),
+                        'session'        =>  $_SESSION,                        
+                        'active'         =>  'catalog',
+                        'error_message'  =>  'Cart is empty'
+                    ]);
+                }                
 
             } catch (\Throwable $th) {
                 $error_msg = [
@@ -69,12 +80,13 @@
                         'quantity'   => $validate->test_input($_POST['quantity']),
                     ];
 
-                    $product = new Product($query->selectOneBy('products', 'id', $fields['product_id']));
-                    $product->setQty($fields['quantity']);                                        
+                    $result = $query->selectOneBy('products', 'id', $fields['product_id']);              
+                    $result['qty'] = $fields['quantity']; 
+                    
+                    $product = new Product($result);                                 
 
                     if($validate->validate_form($fields)) {                                              
-                        $_SESSION['cart'][] = $product;                      
-
+                        $_SESSION['cart'][] = $product;                        
                         $this->render('products/show_product_view.twig', [
                             'menus'         =>  $this->showNavLinks(),
                             'session'       =>  $_SESSION,                        
