@@ -11,8 +11,13 @@
         private ?int    $role       = null;
 
         public function __construct(            
-            private array $fields                       
+            private array $fields = []                      
         )
+        {
+            $this->setUser($this->fields);
+        }
+
+        public function setUser(array $fields): self
         {
             if(!empty($fields)) {
                 foreach($fields as $key => $value) {
@@ -22,6 +27,8 @@
                     }
                 }
             }
+
+            return $this;
         }
 
         
