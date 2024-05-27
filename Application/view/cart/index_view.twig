@@ -6,13 +6,26 @@
 
 {% block main %}
     <h3 class="text-center">Cart</h3>
-    <section class="row rounded shadow p-3 p-lg-5 products">
+    <section class="row rounded shadow p-3 p-lg-4 products">
         {% for product in products %}
-            <figure class="col-sm-6 col-lg-3">
-                <a href="/products/show/{{ product.id }}"><img src="{{ product.image }}" alt="Product {{ product.id }}"></a>
-                {% set currency = "€" %}                
-                <figcaption>{{ product.name }}<br>Price: {{ product.price ~ "%s"|format(currency) }}</figcaption>                
-            </figure>
+            <div class="row mb-3">
+                <figure class="col-sm-6 col-lg-1 m-0 d-flex">
+                    <a class="align-self-center cart-items p-2" href="/products/show/{{ product.id }}"><img src="{{ product.image }}" alt="Product {{ product.id }}"></a>                              
+                </figure>
+                <div class="col-lg-3 align-self-center">
+                    {{ product.name }}  
+                </div>
+                <div class="col-lg-6 align-self-center">
+                    {{ product.description }}
+                </div>
+                <div class="col-lg-1 align-self-center text-center">
+                    {% set currency = "€" %}                
+                    {{ product.price ~ "%s"|format(currency) }}
+                </div>
+                <div class="col-lg-1 align-self-center text-center">
+                    <input class="form-control" type="number" name="qty" id="qty" value="{{ product.qty }}" min="0">
+                </div>
+            </div>
         {% endfor %}
     </section>
 {% endblock main %}

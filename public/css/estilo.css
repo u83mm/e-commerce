@@ -234,7 +234,9 @@ figcaption {
 	font-size: 0.7em;
 }
 
-
+.cart-items:hover {
+	background: rgb(225, 243, 250);
+}
 
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
