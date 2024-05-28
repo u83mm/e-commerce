@@ -27,21 +27,25 @@
                         <tbody>
                             {% for product in products %}
                                 <tr>
-                                    <td class="col-sm-6 col-lg-1 text-center">
-                                        <a href="/products/show/{{ product.id }}"><img class="cart-items p-1" src="{{ product.image }}" alt="Product {{ product.id }}"></a>
-                                    </td>
-                                    <td class="text-center">
-                                        {{ product.name }}
-                                    </td>
-                                    <td class="text-center">
-                                        {% set currency = "€" %}{{ product.price ~ "%s"|format(currency) }}
-                                    </td>
-                                    <td class="text-center">
-                                        <input class="form-control" type="number" name="qty" id="qty" value="{{ product.qty }}" min="0">
-                                    </td>                                    
-                                    <td class="text-center">
-                                        <a class="btn btn-outline-danger" href="/cart/delete/{{ product.id }}">Delete</a>
-                                    </td>
+                                    <form action="/cart/update/{{ product.id }}" method="post">
+                                        <td class="col-sm-6 col-lg-1 text-center">
+                                            <a href="/products/show/{{ product.id }}"><img class="cart-items p-1" src="{{ product.image }}" alt="Product {{ product.id }}"></a>
+                                        </td>
+                                        <td class="text-center">
+                                            {{ product.name }}
+                                        </td>
+                                        <td class="text-center">
+                                            {% set currency = "€" %}{{ product.price ~ "%s"|format(currency) }}
+                                        </td>
+                                        <td class="text-center">
+                                            <input class="form-control" type="number" name="qty" id="qty" value="{{ product.qty }}" min="0">
+                                        </td>                                    
+                                        <td class="text-center">
+                                            <a class="btn btn-outline-danger" href="/cart/remove/{{ product.id }}">Delete</a>
+                                            <input class="btn btn-outline-success" type="submit" value="Update">
+                                        </td>
+                                    </form>
+                                </tr>
                             {% endfor %}
                         </tbody>
                     </table>
