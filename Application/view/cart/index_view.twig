@@ -7,7 +7,12 @@
 {% block main %}
     <h3 class="text-center">Cart</h3>
     <section class="row rounded shadow p-3 p-lg-4 products">
-        {% for product in products %}
+        {% if error_message is defined %}
+            <figure>
+                <img src="/images/empty_cart.webp" alt="empty cart">
+            </figure>            
+        {% else %}
+            {% for product in products %}
             <div class="row mb-3">
                 <figure class="col-sm-6 col-lg-1 m-0 d-flex">
                     <a class="align-self-center cart-items p-2" href="/products/show/{{ product.id }}"><img src="{{ product.image }}" alt="Product {{ product.id }}"></a>                              
@@ -26,6 +31,7 @@
                     <input class="form-control" type="number" name="qty" id="qty" value="{{ product.qty }}" min="0">
                 </div>
             </div>
-        {% endfor %}
+            {% endfor %}
+        {% endif %}        
     </section>
 {% endblock main %}
