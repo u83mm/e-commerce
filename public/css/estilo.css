@@ -89,13 +89,6 @@ a {
 	text-decoration: none;
 }
 
-td {
-	text-align: center;
-	padding: 0.5em;
-	border: 1px solid black;
-	background-color: antiquewhite;
-}
-
 label{
 	padding-right: 0.5em;		
 }
@@ -140,12 +133,6 @@ pre {
 
 table {
 	margin-top: 2em;
-}
-
-th {
-	border: 1px solid black;
-	padding: 1em;
-	background-color: yellow;
 }
 
 sup {

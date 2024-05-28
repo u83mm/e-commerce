@@ -11,27 +11,42 @@
             <figure>
                 <img src="/images/empty_cart.webp" alt="empty cart">
             </figure>            
-        {% else %}
-            {% for product in products %}
+        {% else %}            
             <div class="row mb-3">
-                <figure class="col-sm-6 col-lg-1 m-0 d-flex">
-                    <a class="align-self-center cart-items p-2" href="/products/show/{{ product.id }}"><img src="{{ product.image }}" alt="Product {{ product.id }}"></a>                              
-                </figure>
-                <div class="col-lg-3 align-self-center">
-                    {{ product.name }}  
-                </div>
-                <div class="col-lg-6 align-self-center">
-                    {{ product.description }}
-                </div>
-                <div class="col-lg-1 align-self-center text-center">
-                    {% set currency = "€" %}                
-                    {{ product.price ~ "%s"|format(currency) }}
-                </div>
-                <div class="col-lg-1 align-self-center text-center">
-                    <input class="form-control" type="number" name="qty" id="qty" value="{{ product.qty }}" min="0">
-                </div>
-            </div>
-            {% endfor %}
+                <div class="col-12 col-xl-9 mx-auto table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="text-center"></th>
+                                <th scope="col" class="text-center">Product</th>
+                                <th scope="col" class="text-center">Price</th>
+                                <th scope="col" class="text-center">Quantity</th>                                
+                                <th scope="col" class="text-center">Options</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for product in products %}
+                                <tr>
+                                    <td class="col-sm-6 col-lg-1 text-center">
+                                        <a href="/products/show/{{ product.id }}"><img class="cart-items p-1" src="{{ product.image }}" alt="Product {{ product.id }}"></a>
+                                    </td>
+                                    <td class="text-center">
+                                        {{ product.name }}
+                                    </td>
+                                    <td class="text-center">
+                                        {% set currency = "€" %}{{ product.price ~ "%s"|format(currency) }}
+                                    </td>
+                                    <td class="text-center">
+                                        <input class="form-control" type="number" name="qty" id="qty" value="{{ product.qty }}" min="0">
+                                    </td>                                    
+                                    <td class="text-center">
+                                        <a class="btn btn-outline-danger" href="/cart/delete/{{ product.id }}">Delete</a>
+                                    </td>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>                         
+            </div>            
         {% endif %}        
     </section>
 {% endblock main %}

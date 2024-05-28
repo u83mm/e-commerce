@@ -9,8 +9,8 @@
     class CartController extends Controller
     {
         private string $message = "";
-        public function index()
-        {              
+        public function index() : void
+        {                       
             try {
                 // Test privileges
                 if(!$this->testAccess([
@@ -59,7 +59,7 @@
             
         }
 
-        public function add(string $id = "") 
+        public function add(string $id = "") : void 
         {
             $validate = new Validate();
             $query = new Query();            
@@ -86,7 +86,7 @@
                     $product = new Product($result);                                 
 
                     if($validate->validate_form($fields)) {                                              
-                        $_SESSION['cart'][] = $product;                        
+                        $_SESSION['cart'][$product->getId()] = $product;                        
                         $this->render('products/show_product_view.twig', [
                             'menus'         =>  $this->showNavLinks(),
                             'session'       =>  $_SESSION,                        
@@ -125,5 +125,41 @@
                 ]);
             }
         }
+
+        public function delete(string $id = "") : void
+        {
+            // Test privileges
+            if(!$this->testAccess([
+                'ROLE_USER',
+                'ROLE_ADMIN'
+            ])) {
+                header('Location: /login');
+                die;
+            }
+            
+            try { 
+                unset($_SESSION['cart'][$id]);
+                if(count($_SESSION['cart']) == 0) unset($_SESSION['cart']);                                                         
+                $this->index();
+            }
+            catch (\Throwable $th) {
+                $error_msg = [
+                    'error' =>  $th->getMessage(),
+                ];
+
+                if(isset($_SESSION['role']) && $this->testAccess(['ROLE_ADMIN'])) {
+                    $error_msg = [
+                        "Message:"  =>  $th->getMessage(),
+                        "Path:"     =>  $th->getFile(),
+                        "Line:"     =>  $th->getLine(),
+                    ];
+                }
+
+                $this->render('error_view.twig', [
+                    'menus'             => $this->showNavLinks(),
+                    'exception_message' => $error_msg,                
+                ]);
+            }            
+        }   
     }    
 ?>
