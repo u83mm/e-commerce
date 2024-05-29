@@ -6,13 +6,16 @@
 
 {% block main %}
     <h3 class="text-center">Cart</h3>
-    <section class="row rounded shadow p-3 p-lg-4 products">
+    <section class="row rounded shadow p-3 p-lg-4 products">        
         {% if error_message is defined %}
             <figure>
                 <img src="/images/empty_cart.webp" alt="empty cart">
             </figure>            
         {% else %}            
             <div class="row mb-3">
+                <div class="col-12 text-end">
+                    <a href="/cart/clear"><img height="40" src="/images/trash.webp" alt="empty cart"></a>                                  
+                </div>                
                 <div class="col-12 col-xl-9 mx-auto table-responsive">
                     <table class="table">
                         <thead>

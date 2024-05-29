@@ -207,5 +207,20 @@
                 ]);
             }
         }
+
+        function clear() : void
+        {
+            // Test privileges
+            if(!$this->testAccess([
+                'ROLE_USER',
+                'ROLE_ADMIN'
+            ])) {
+                header('Location: /login');
+                die;
+            }
+
+            unset($_SESSION['cart']);
+            $this->index();
+        }
     }    
 ?>
