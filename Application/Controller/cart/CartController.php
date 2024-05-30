@@ -141,7 +141,7 @@
             try { 
                 unset($_SESSION['cart'][$id]);
                 if(count($_SESSION['cart']) == 0) unset($_SESSION['cart']);                                                         
-                $this->index();
+                header('Location: /cart');
             }
             catch (\Throwable $th) {
                 $error_msg = [
@@ -186,7 +186,7 @@
                     if($validate->validate_form($fields)) $_SESSION['cart'][$id]->setQty($fields['quantity']);                   
                 }
 
-                $this->index();
+                header('Location: /cart');
 
             } catch (\Throwable $th) {
                 $error_msg = [
@@ -220,7 +220,7 @@
             }
 
             unset($_SESSION['cart']);
-            $this->index();
+            header('Location: /cart');
         }
     }    
 ?>
