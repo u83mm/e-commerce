@@ -21,22 +21,21 @@
                     die;
                 }                                  
 
-                if(isset($_SESSION['cart'])) {                                                       
-                    $this->render('cart/index_view.twig', [
-                        'menus'         =>  $this->showNavLinks(),
-                        'session'       =>  $_SESSION,                        
-                        'active'        =>  'catalog', 
-                        'products'      =>  $_SESSION['cart']                    
-                    ]);
+                // Get total price
+                $total = 0;
+                $products = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
+                foreach($products as $item) {
+                    $total += $item->getPrice() * $item->getQty();
                 }
-                else {
-                    $this->render('cart/index_view.twig', [
-                        'menus'          =>  $this->showNavLinks(),
-                        'session'        =>  $_SESSION,                        
-                        'active'         =>  'catalog',
-                        'error_message'  =>  'Cart is empty'
-                    ]);
-                }                
+
+                $this->render('cart/index_view.twig', [
+                    'menus'         =>  $this->showNavLinks(),
+                    'session'       =>  $_SESSION,                        
+                    'active'        =>  'catalog', 
+                    'products'      =>  $products,
+                    'total'         =>  $total,
+                    'empty_cart'    =>  empty($products)
+                ]);
 
             } catch (\Throwable $th) {
                 $error_msg = [
@@ -85,15 +84,16 @@
                     
                     $product = new Product($result);                                 
 
-                    if($validate->validate_form($fields)) {                                              
-                        $_SESSION['cart'][$product->getId()] = $product; 
+                    if($validate->validate_form($fields)) { 
+                        // Add product to cart                                             
+                        $_SESSION['cart'][$product->getId()] = $product;                                                
 
                         $this->render('products/show_product_view.twig', [
                             'menus'         =>  $this->showNavLinks(),
                             'session'       =>  $_SESSION,                        
                             'active'        =>  'catalog',
                             'message'       =>  'Product added to cart',
-                            'product'       =>  $product
+                            'product'       =>  $product,                            
                         ]);
                     }
                     else {
@@ -208,7 +208,7 @@
             }
         }
 
-        function clear() : void
+        public function clear() : void
         {
             // Test privileges
             if(!$this->testAccess([

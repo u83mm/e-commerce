@@ -7,7 +7,7 @@
 {% block main %}
     <h3 class="text-center">Cart</h3>
     <section class="row rounded shadow p-3 p-lg-4 products">        
-        {% if error_message is defined %}
+        {% if empty_cart %}
             <figure>
                 <img src="/images/empty_cart.webp" alt="empty cart">
             </figure>            
@@ -16,7 +16,8 @@
                 <div class="col-12 text-end">
                     <a href="/cart/clear"><img height="40" src="/images/trash.webp" alt="empty cart"></a>                                  
                 </div>                
-                <div class="col-12 col-xl-9 mx-auto">                    
+                <div class="col-12 col-xl-9 mx-auto">  
+                    {% set currency = "€" %}                  
                     {% for product in products %}
                     <hr>
                     <form class="col-12" action="/cart/update/{{ product.id }}" method="post">
@@ -25,13 +26,13 @@
                         </div>
                         <div class="col-12 mb-2 m-md-0 col-md-3 col-lg-3 d-inline-block text-center">
                             {{ product.name }}
-                        </div>
-                        <div class="col-12 mb-2 m-md-0 col-md-1 d-inline-block text-center">
-                            {% set currency = "€" %}{{ product.price ~ "%s"|format(currency) }}
-                        </div>
+                        </div>                        
                         <div class="col-12 mb-4 m-md-0 col-md-2 d-inline-block text-center">
                             <input class="form-control" type="number" name="qty" value="{{ product.qty }}" min="0">
-                        </div>                                    
+                        </div>   
+                        <div class="col-12 mb-2 m-md-0 col-md-1 d-inline-block text-center">
+                            {{ product.price * product.qty ~ "%s"|format(currency) }}
+                        </div>                                 
                         <div class="col-12 mb-2 m-md-0 col-md-4 d-inline-block text-center">
                             <a class="btn btn-outline-danger" href="/cart/remove/{{ product.id }}">Delete</a>
                             <input class="btn btn-outline-success" type="submit" value="Update">
@@ -40,7 +41,15 @@
                     {% endfor %}
                     <hr>
                 </div>                         
-            </div>            
+            </div>
+            <div class="row">
+                <div class="col-12 col-xl-9 mx-auto text-end">                    
+                    <p>Total: <strong class="p-1">{{ total ~ "%s"|format(currency) }}</strong></p>
+                    <a class="btn btn-outline-success" href="/products">Continue shopping</a>
+                    <a class="btn btn-outline-success" href="/cart/checkout">Checkout</a>
+                </div>                
+            </div>  
+
         {% endif %}        
     </section>
 {% endblock main %}
