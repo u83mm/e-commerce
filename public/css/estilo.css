@@ -123,7 +123,7 @@ header {
 	background: lightgray;
 }
 
-input[type="button"], [type="text"], [type="number"] {
+input[type="button"], [type="number"] {
 	padding: 0.5em;
 }
 
@@ -223,6 +223,10 @@ figcaption {
 
 .cart-items:hover {
 	background: rgb(225, 243, 250);
+}
+
+.show_password {
+	cursor: pointer;
 }
 
 /***************** Configuración para móviles **********************/
