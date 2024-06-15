@@ -111,8 +111,7 @@
             try {
                 $stm = $this->dbcon->pdo->prepare($query);                        
                 $stm->execute($params);       				
-                $stm->closeCursor();
-                $dbcon = null;
+                $stm->closeCursor();                
 
             } catch (\Throwable $th) {
                 throw new \Exception("{$th->getMessage()}", 1);
@@ -136,7 +135,7 @@
             }           
         }
 
-        public function deleteRegistry(string $table, string $fieldId, string $id)
+        public function deleteRegistry(string $table, string $fieldId, string|int $id)
         {
             $query = "DELETE FROM $table WHERE $fieldId = :id";                 
 
@@ -322,6 +321,42 @@
 
             } catch (\Throwable $th) {
                 throw new \Exception("{$th->getMessage()}");
+            }
+        }
+
+        public function updateRow(string $table, array|object $fields, string|int $id): void
+        {
+            /** Initialice variables */
+            $query = "";
+            $count = 0;
+            $query = "UPDATE $table SET ";            
+
+            foreach ($fields as $key => $value) {
+                if(++$count === count($fields)) {
+                    $query .= $key . " = :" . $key;
+                } else {
+                    $query .= $key . " = :" . $key . ", ";
+                }                
+            }
+            
+            $query .= " WHERE id = '$id'";            
+                                                    
+            try {
+                $stm = $this->dbcon->pdo->prepare($query);
+                foreach ($fields as $key => $value) {
+                    if($key === 'password') {
+                        $stm->bindValue(":password", password_hash($value, PASSWORD_DEFAULT));
+                        continue;
+                    }
+                    
+                    $stm->bindValue(":$key", $value);
+                } 
+                                
+                $stm->execute();       				
+                $stm->closeCursor();
+                
+            } catch (\Throwable $th) {
+                throw new \Exception("{$th->getMessage()}", 1);             
             }
         }
     }    
