@@ -229,6 +229,59 @@ figcaption {
 	cursor: pointer;
 }
 
+/***************** Password strength style *************************/
+.strength {
+	width: 80%;
+	height: 0.5em;	
+	margin-top: 0.5em;
+	border-radius: 0.5em;
+	background-color: #ddd;
+	margin: 0 auto;
+	padding: 0;
+}
+
+.strength_bar {
+	height: 100%;
+	border-radius: 0.5em;
+	transition: 0.3s;
+	-webkit-transition: 0.3s;
+	-moz-transition: 0.3s;
+	-ms-transition: 0.3s;
+	-o-transition: 0.3s;
+}
+
+.strength_bar.very_weak {
+	background-color: red;
+	width: 20%;
+}
+
+.strength_bar.weak {
+	background-color: lightsalmon;
+	width: 25%;
+}
+
+.strength_bar.medium {
+	background-color: orange;
+	width: 50%;
+}
+
+.strength_bar.strong {
+	background-color: yellowgreen;
+	width: 75%;
+}
+
+.strength_bar.very_strong {
+	background-color: green;
+	width: 100%;
+}
+
+.message {
+	text-align: center;
+	color: #888;
+}
+
+/***************** End Password strength style *********************/
+
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
 	.home-images-main {
