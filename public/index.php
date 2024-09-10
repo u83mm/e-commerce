@@ -10,5 +10,4 @@
 	$loader->init($_SERVER['DOCUMENT_ROOT'] . "/..");	
 	
 	$app = new App;
-	$app->loadController();	
-?>
+	$app->loadController();
