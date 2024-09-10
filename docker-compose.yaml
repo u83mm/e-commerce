@@ -23,9 +23,13 @@ services:
       user: "1000"
       container_name: php
       ports:
-      - "80:80"
+        - "80:80"
+      extra_hosts:
+        - "host.docker.internal:host-gateway"
       tty: true
       volumes: 
-        - "../Ecommerce:/var/www"
+        - "./:/var/www"
+        - ./docker-php-ext-xdebug.ini:/usr/local/etc/php/php.ini
+        - ./docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
         - "./Application/log/apache:/var/log/apache2"
         - "./Application/log/php:/srv/var/log"      
