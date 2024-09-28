@@ -35,23 +35,18 @@
                 $filename = SITE_ROOT . "/../Application/Controller/$url[0]/" . ucfirst($url[0]) . "Controller.php";                
             }
             
-            /** build route to controller */
-            $streep_first = SITE_ROOT . "/..";
+            /** build route to controller */            
             $controller_path = str_replace(['/var/www/public/..', '.php'], '', $filename); 
             $controller_path = str_replace('/', '\\', $controller_path);           
             
-            if(file_exists($filename)) {
-                //require_once($filename);                                          
-                $this->controller = ucfirst($url[0]);  
-                //$controller_path = '\Application\Controller\\' . strtolower($this->controller) . '\\' . ucfirst($this->controller) . 'Controller';               
+            if(file_exists($filename)) {                                                       
+                $this->controller = ucfirst($url[0]);                         
                 array_shift($url);                               
             }
-            /* else {
-                //$filename = SITE_ROOT . "/../Application/Controller/ErrorController.php";    
-                //require_once($filename);
+            else {                
                 $this->controller = "ErrorController";
                 $controller_path = '\Application\Controller\\' . ucfirst($this->controller); 
-            } */
+            }
             
             /** build controller */                                     
             $controller = new $controller_path();                        
