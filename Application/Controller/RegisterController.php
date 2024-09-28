@@ -1,4 +1,7 @@
 <?php
+    declare(strict_types=1);
+
+    namespace Application\Controller;
 
     use App\Core\Controller;
     use Application\model\User;
@@ -104,7 +107,7 @@
                     $this->render('register/register_view.twig', $data);                                                                                                                                                                                             
                 }
                 else {
-                    throw new Exception("Service unavailable", 1);                    
+                    throw new \Exception("Service unavailable", 1);                    
                 }                                
             } catch (\Throwable $th) {               
                 $error_msg = [

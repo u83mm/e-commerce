@@ -1,6 +1,8 @@
 <?php
     declare(strict_types=1);    
 
+    namespace Application\Controller\category;
+
     use App\Core\Controller;    
     use model\classes\Query;
     use model\classes\Validate;
@@ -50,7 +52,7 @@
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
-                    throw new Exception("Unauthorized access!", 1);
+                    throw new \Exception("Unauthorized access!", 1);
                 }
 
                 $query = new Query;
@@ -159,10 +161,10 @@
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
-                    throw new Exception("Unauthorized access!", 1);
+                    throw new \Exception("Unauthorized access!", 1);
                 }
                 
-                if(empty($id)) throw new Exception("There are any category to delete.", 1);
+                if(empty($id)) throw new \Exception("There are any category to delete.", 1);
 
                 $query = new Query;                
 

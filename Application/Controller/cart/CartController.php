@@ -1,6 +1,10 @@
 <?php
     declare(strict_types=1);
 
+    namespace Application\Controller\cart;
+
+    //session_start();
+
     use App\Core\Controller;
     use Application\model\Product;
     use model\classes\Query;
@@ -21,13 +25,18 @@
                     die;
                 }                                  
 
-                // Get total price
+                // Unserialize cart and get total price
                 $total = 0;
                 $products = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
-                foreach($products as $item) {
-                    $total += $item->getPrice() * $item->getQty();
-                }
 
+                if(count($products) > 0) {
+                    foreach($products as $item) {
+                        //$total += unserialize($item)->getPrice() * unserialize($item)->getQty();
+                        $total += $item->getPrice() * $item->getQty();
+                        //$products_unserialized[] = unserialize($item);
+                    }
+                }
+                
                 $this->render('cart/index_view.twig', [
                     'menus'         =>  $this->showNavLinks(),
                     'session'       =>  $_SESSION,                        
@@ -86,7 +95,8 @@
 
                     if($validate->validate_form($fields)) { 
                         // Add product to cart                                             
-                        $_SESSION['cart'][$product->getId()] = $product;                                                
+                        //$_SESSION['cart'][$product->getId()] = serialize($product);
+                        $_SESSION['cart'][$product->getId()] = $product;                                                 
 
                         $this->render('products/show_product_view.twig', [
                             'menus'         =>  $this->showNavLinks(),

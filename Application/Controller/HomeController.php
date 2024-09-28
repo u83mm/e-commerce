@@ -1,4 +1,9 @@
 <?php
+    declare(strict_types=1);
+
+    namespace Application\Controller;
+
+    //session_start();
 
     use App\Core\Controller;
 

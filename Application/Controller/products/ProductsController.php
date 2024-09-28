@@ -1,6 +1,8 @@
 <?php
     declare(strict_types=1);
 
+    namespace Application\Controller\products;
+
     use App\Core\Controller;
     use model\classes\CommonTasks;
     use model\classes\Query;
@@ -67,7 +69,7 @@
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
-                    throw new Exception("Unauthorized access!", 1);
+                    throw new \Exception("Unauthorized access!", 1);
                 }
 
                 // Build objects
@@ -106,14 +108,14 @@
                         }
 
                         if(!is_uploaded_file($_FILES['image']['tmp_name'])) {
-                            throw new Exception(
+                            throw new \Exception(
                                 "Something went wrong!. Uploaded request: file named '{$_FILES['image']['tmp_name']}'", 
                                 1
                             );
                         }
 
                         if(!getimagesize($_FILES['image']['tmp_name'])) {
-                            throw new Exception(
+                            throw new \Exception(
                                 "The file yo're trying to upload isn't a valid file. {$_FILES['image']['name']}" . 
                                 "must be (*.gif, *.jpg, *.jpeg o *.png).", 
                                 1);                            
@@ -127,7 +129,7 @@
 
                         if(strncmp($type, "image/", 6) == 0) {
                             if(!move_uploaded_file($_FILES['image']['tmp_name'], $upload_filename)){
-                                throw new Exception(
+                                throw new \Exception(
                                     "Error Processing Request to save the file. Maybe you've a problem with permissions folder " . 
                                     "in $upload_filename",
                                     1
@@ -148,7 +150,7 @@
                             ImageDestroy($final_image); 
                         }
                         else {
-                            throw new Exception("The file format must be (jpeg, jpg, gif or png).");                    	
+                            throw new \Exception("The file format must be (jpeg, jpg, gif or png).");                    	
                         }
 
                         // Insert data in DB                        
@@ -207,7 +209,7 @@
         /** Show product */
         public function show(string $id = "") : void {  
             try {                
-                if(empty($id)) throw new Exception("There are any product to show.", 1);
+                if(empty($id)) throw new \Exception("There are any product to show.", 1);
 
                 // Build objects
                 $query = new Query;
@@ -248,10 +250,10 @@
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
-                    throw new Exception("Unauthorized access!", 1);
+                    throw new \Exception("Unauthorized access!", 1);
                 }
 
-                if(empty($id)) throw new Exception("There are any product to edit.", 1);
+                if(empty($id)) throw new \Exception("There are any product to edit.", 1);
 
                 // Build objects
                 $query = new Query;
@@ -292,14 +294,14 @@
                             }
 
                             if(!is_uploaded_file($_FILES['image']['tmp_name'])) {
-                                throw new Exception(
+                                throw new \Exception(
                                     "Something went wrong!. Uploaded request: file named '{$_FILES['image']['tmp_name']}'", 
                                     1
                                 );
                             }
 
                             if(!getimagesize($_FILES['image']['tmp_name'])) {
-                                throw new Exception(
+                                throw new \Exception(
                                     "The file yo're trying to upload isn't a valid file. {$_FILES['image']['name']}" . 
                                     "must be (*.gif, *.jpg, *.jpeg o *.png).", 
                                     1);                            
@@ -313,7 +315,7 @@
 
                             if(strncmp($type, "image/", 6) == 0) {
                                 if(!move_uploaded_file($_FILES['image']['tmp_name'], $upload_filename)){
-                                    throw new Exception(
+                                    throw new \Exception(
                                         "Error Processing Request to save the file. Maybe you've a problem with permissions folder " . 
                                         "in $upload_filename",
                                         1
@@ -334,7 +336,7 @@
                                 ImageDestroy($final_image); 
                             }
                             else {
-                                throw new Exception("The file format must be (jpeg, jpg, gif or png).");                    	
+                                throw new \Exception("The file format must be (jpeg, jpg, gif or png).");                    	
                             }
 
                             // Delete old picture and add the new one.
@@ -393,10 +395,10 @@
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
-                    throw new Exception("Unauthorized access!", 1);
+                    throw new \Exception("Unauthorized access!", 1);
                 }
                 
-                if(empty($id)) throw new Exception("There are any product to edit.", 1);
+                if(empty($id)) throw new \Exception("There are any product to edit.", 1);
 
                 // Build objects
                 $query = new Query;
