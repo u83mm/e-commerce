@@ -1,13 +1,12 @@
 services:
   db:    
-    build: ./Application/MariaDB/
-    user: "1000"
+    build: ./Application/MariaDB/    
     container_name: db   
     env_file: ./Application/MariaDB/.env     
     ports:
       - "3306:3306"
     volumes: 
-        - "./Application/db_vol:/var/lib/mysql"
+        - db_vol:/var/lib/mysql
         - "./Application/log/db:/var/log"        
 
   phpmyadmin:    
@@ -18,7 +17,9 @@ services:
     environment:
       - PMA_ARBITRAY=1
 
-  web:      
+  web:
+      depends_on:
+        - db
       build: .
       user: "1000"
       container_name: php
@@ -32,4 +33,7 @@ services:
         - ./docker-php-ext-xdebug.ini:/usr/local/etc/php/php.ini
         - ./docker-php-ext-xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
         - "./Application/log/apache:/var/log/apache2"
-        - "./Application/log/php:/srv/var/log"      
+        - "./Application/log/php:/var/log"
+
+volumes:
+  db_vol:

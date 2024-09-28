@@ -1,5 +1,9 @@
 <?php
 
+    declare(strict_types=1);
+
+    namespace Application\Controller;
+    
 	use App\Core\Controller;
 
     class LogoutController extends Controller

@@ -16,9 +16,6 @@ RUN ln -snf /usr/share/zoneinfo/${TIMEZONE} /etc/localtime && echo ${TIMEZONE} >
 RUN printf '[PHP]\ndate.timezone = "%s"\n', ${TIMEZONE} > /usr/local/etc/php/conf.d/tzone.ini
 RUN "date"
 
-# Change permission to public directory
-#RUN chown www-data:www-data -R /var/www/public
-
 # Install system dependencies
 RUN apt-get update && apt-get install -y git unzip zlib1g-dev libpng-dev libjpeg-dev libfreetype6-dev libwebp-dev 
 
@@ -42,7 +39,6 @@ RUN addgroup --gid ${GROUP_ID} mario
 RUN adduser --disabled-password --gecos '' --uid ${USER_ID} --gid ${GROUP_ID} mario
 
 USER 1000
-
 
 # Set working directory
 WORKDIR /var/www

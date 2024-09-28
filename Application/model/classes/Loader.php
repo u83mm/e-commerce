@@ -1,6 +1,6 @@
 <?php
 // autoload classes as needed
-namespace model\classes;
+namespace Application\model\classes;
 
 class Loader
 {

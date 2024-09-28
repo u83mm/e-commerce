@@ -1,6 +1,8 @@
 <?php
     declare(strict_types = 1);
 
+    namespace Application\Controller;
+
     use App\Core\Controller;
     use model\classes\Query;
     use model\classes\Validate;
