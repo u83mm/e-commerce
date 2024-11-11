@@ -56,7 +56,7 @@
                 if(method_exists($controller, $url[0])) {
                     $this->method = $url[0];
                     array_shift($url);
-                }  
+                }
             }
                                 
             call_user_func_array([$controller, $this->method], $url);

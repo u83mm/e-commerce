@@ -5,8 +5,8 @@ ARG TIMEZONE="Europe/Madrid"
 ARG USER_ID=1000
 ARG GROUP_ID=1000
 
-COPY /php.ini-development /usr/local/etc/php/
-COPY /php.ini-production /usr/local/etc/php/
+COPY /php_conf/php.ini-development /usr/local/etc/php/
+COPY /php_conf/php.ini-production /usr/local/etc/php/
 COPY /apache_conf/apache2.conf /etc/apache2
 
 COPY / /var/www/
@@ -31,8 +31,8 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Configure virtual host
 RUN mv /etc/apache2/sites-available/000-default.conf /etc/apache2/sites-available/000-default.conf.old
 RUN mv /etc/apache2/sites-available/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf.old
-COPY 000-default.conf /etc/apache2/sites-available/000-default.conf
-COPY default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
+COPY /apache_conf/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY /apache_conf/default-ssl.conf /etc/apache2/sites-available/default-ssl.conf
 
 # Asigna grupo y usuario en contenedor para no tener que estar cambiando propietario a los archivos creados desde el contenedor
 RUN addgroup --gid ${GROUP_ID} mario
