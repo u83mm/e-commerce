@@ -71,7 +71,7 @@
 				
 				{% if message is defined %}
 					<p class="alert alert-success text-center">{{ message }}</p>					
-				{% elseif error_message is defined %}
+				{% elseif error_message is defined and error_message is not empty %}
 					{% if error_message is iterable %}
 					<p class="alert alert-danger text-center">
 						{% for key, row in error_message %}
