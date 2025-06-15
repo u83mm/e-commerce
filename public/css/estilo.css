@@ -282,6 +282,11 @@ figcaption {
 
 /***************** End Password strength style *********************/
 
+.add_to_cart_icon {
+	margin-left: 0.5em;
+	vertical-align: middle;
+}
+
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
 	.home-images-main {
