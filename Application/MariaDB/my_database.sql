@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: db
--- Generation Time: Sep 28, 2024 at 10:33 AM
+-- Generation Time: Jun 15, 2025 at 10:32 AM
 -- Server version: 11.5.2-MariaDB-ubu2404
 -- PHP Version: 8.2.23
 
@@ -157,7 +157,8 @@ ALTER TABLE `roles`
 --
 ALTER TABLE `users`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `fk_user_role` (`id_role`);
+  ADD KEY `fk_user_role` (`id_role`),
+  ADD KEY `idx_id` (`id`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -173,7 +174,7 @@ ALTER TABLE `category`
 -- AUTO_INCREMENT for table `limit_access`
 --
 ALTER TABLE `limit_access`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT for table `products`
@@ -201,13 +202,13 @@ ALTER TABLE `users`
 -- Constraints for table `products`
 --
 ALTER TABLE `products`
-  ADD CONSTRAINT `products_fk_category` FOREIGN KEY (`id_category`) REFERENCES `category` (`id_category`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `products_fk_category` FOREIGN KEY (`id_category`) REFERENCES `category` (`id_category`) ON UPDATE CASCADE;
 
 --
 -- Constraints for table `users`
 --
 ALTER TABLE `users`
-  ADD CONSTRAINT `users_fk_roles` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `fk_user_role` FOREIGN KEY (`id_role`) REFERENCES `roles` (`id_role`) ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
