@@ -19,7 +19,7 @@
 
             <form action="/cart/add/{{ product.id }}" method="post">                
                 <input class="form-control mb-2" type="number" name="quantity" id="quantity" min="1" value="0"><span></span>
-                <input type="image" src="/images/shopping-cart1.svg" height="20" alt="add to cart">                
+                <input class="add_to_cart_icon" type="image" src="/images/shopping-cart1.svg" height="20" alt="add to cart" title="Add to cart">                
             </form>   
 
             <p>Category: {{ product.category|capitalize }}</p>
