@@ -12,7 +12,10 @@
     {
         public function __construct(
             private array $products = [],
-            private array $categories = [],            
+            private array $categories = [],
+            private Query $query = new Query,
+            private Validate $validate = new Validate,
+            private CommonTasks $commonTask = new CommonTasks,            
         ) 
         {
 
@@ -20,11 +23,9 @@
 
         /** Show products index */
         public function index() {
-            try {
-                $query = new Query;
-
+            try {                
                 // We obtain all products from DB
-                $this->products = $query->selectAll('products');
+                $this->products = $this->query->selectAll('products');
 
                 if (!$this->products) {
                     $this->render('products/index_view.twig', [
@@ -63,34 +64,28 @@
         }
 
         /** Create a new product */
-        public function new() : void {
-            $validate = new Validate;
-
+        public function new() : void {            
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
                     throw new \Exception("Unauthorized access!", 1);
                 }
-
-                // Build objects
-                $commonTask = new CommonTasks;
-                $query = new Query;
-
+                              
                 // Get all categories
-                $this->categories = $query->selectAll('category');                
+                $this->categories = $this->query->selectAll('category');                
 
                 // If form is send and is valid
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     // Get values from form
                     $fields = [
-                        'name'          =>!empty($_POST['name'])        ? $validate->test_input($_POST['name']) : null,
-                        'description'   =>!empty($_POST['description']) ? $validate->test_input($_POST['description']) : null,
-                        'price'         =>!empty($_POST['price'])       ? $validate->test_input($_POST['price']) : "",
-                        'id_category'   =>!empty($_POST['category'])    ? $validate->test_input($_POST['category']): "",
+                        'name'          =>!empty($_POST['name'])        ? $this->validate->test_input($_POST['name']) : null,
+                        'description'   =>!empty($_POST['description']) ? $this->validate->test_input($_POST['description']) : null,
+                        'price'         =>!empty($_POST['price'])       ? $this->validate->test_input($_POST['price']) : "",
+                        'id_category'   =>!empty($_POST['category'])    ? $this->validate->test_input($_POST['category']): "",
                     ];                    
                     
                     // Save data in DB
-                    if($validate->validate_form($fields)) { 
+                    if($this->validate->validate_form($fields)) { 
                         /** Picture's data */                        
                         $type = trim($_FILES['image']['type']);                                                                                                                      
 
@@ -137,12 +132,12 @@
                             }                                                        
 
                             // Create file type (jpeg, jpg, png or gif)                            
-                            $original = $commonTask->createImageFromSource($upload_filename, $type);
+                            $original = $this->commonTask->createImageFromSource($upload_filename, $type);
 
                             // Resize the image    
                             $w = 400; // width value for the new image
                             $h = 500; // heigh value for the new image
-                            $final_image = $commonTask->resizeImage($original, $w, $h);
+                            $final_image = $this->commonTask->resizeImage($original, $w, $h);
 
                             // replace the image on the server
                             ImagePNG($final_image, $upload_filename, 9);
@@ -154,9 +149,9 @@
                         }
 
                         // Insert data in DB                        
-                        $fields['image'] = $commonTask->getWebPath($upload_filename);
+                        $fields['image'] = $this->commonTask->getWebPath($upload_filename);
 
-                        $query->insertInto('products', $fields);
+                        $this->query->insertInto('products', $fields);
 
                         $this->render('products/new_product_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
@@ -173,7 +168,7 @@
                             'active'        => 'administration',
                             'fields'        =>  $fields,
                             'categories'    =>  $this->categories,
-                            'error_message' => $validate->get_msg(),
+                            'error_message' => $this->validate->get_msg(),
                         ]);
                     }
                 }
@@ -209,13 +204,9 @@
         /** Show product */
         public function show(string $id = "") : void {  
             try {                
-                if(empty($id)) throw new \Exception("There are any product to show.", 1);
+                if(empty($id)) throw new \Exception("There are any product to show.", 1);                
 
-                // Build objects
-                $query = new Query;
-                $commonTask = new CommonTasks;
-
-                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id);                                                
+                $product = $this->query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id);                                                
                 
                 $this->render('products/show_product_view.twig', [
                     'menus'     =>  $this->showNavLinks(),
@@ -253,28 +244,23 @@
                     throw new \Exception("Unauthorized access!", 1);
                 }
 
-                if(empty($id)) throw new \Exception("There are any product to edit.", 1);
+                if(empty($id)) throw new \Exception("There are any product to edit.", 1);    
 
-                // Build objects
-                $query = new Query;
-                $validate = new Validate;
-                $commonTask = new CommonTasks;
-
-                $product = $query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id);
+                $product = $this->query->selectOneByIdInnerjoinOnfield('products', 'category', 'id_category', 'id', $id);
                 
                 // Get all categories
-                $this->categories = $query->selectAll('category');
+                $this->categories = $this->query->selectAll('category');
                 
                 // Update product                
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $fields = [
-                        'name'          => !empty($_POST['name']) ? $validate->test_input($_POST['name']) : null,
-                        'description'   => !empty($_POST['description']) ? $validate->test_input($_POST['description']) : null,                        
-                        'id_category'   => !empty($_POST['category']) ? intval($validate->test_input($_POST['category'])) : null, 
-                        'price'         => !empty($_POST['price']) ? floatval($validate->test_input($_POST['price'])) : null,                      
+                        'name'          => !empty($_POST['name']) ? $this->validate->test_input($_POST['name']) : null,
+                        'description'   => !empty($_POST['description']) ? $this->validate->test_input($_POST['description']) : null,                        
+                        'id_category'   => !empty($_POST['category']) ? intval($this->validate->test_input($_POST['category'])) : null, 
+                        'price'         => !empty($_POST['price']) ? floatval($this->validate->test_input($_POST['price'])) : null,                      
                     ];
 
-                    if($validate->validate_form($fields)) {
+                    if($this->validate->validate_form($fields)) {
                         // If there is an image to update
                         if(!empty($_FILES['image']['name'])) {
                             /** Picture's data */                        
@@ -323,12 +309,12 @@
                                 }                                                        
 
                                 // Create file type (jpeg, jpg, png or gif)                            
-                                $original = $commonTask->createImageFromSource($upload_filename, $type);
+                                $original = $this->commonTask->createImageFromSource($upload_filename, $type);
 
                                 // Resize the image    
                                 $w = 400; // width value for the new image
                                 $h = 500; // heigh value for the new image
-                                $final_image = $commonTask->resizeImage($original, $w, $h);
+                                $final_image = $this->commonTask->resizeImage($original, $w, $h);
 
                                 // replace the image on the server
                                 ImagePNG($final_image, $upload_filename, 9);
@@ -340,18 +326,18 @@
                             }
 
                             // Delete old picture and add the new one.
-                            $commonTask->deletePicture($product['image']); 
+                            $this->commonTask->deletePicture($product['image']); 
 
                             $fields = [
-                                'name'          => !empty($_POST['name']) ? $validate->test_input($_POST['name']) : null,
-                                'description'   => !empty($_POST['description']) ? $validate->test_input($_POST['description']) : null,                        
-                                'id_category'   => !empty($_POST['category']) ? intval($validate->test_input($_POST['category'])) : null,
-                                'image'         => $commonTask->getWebPath($upload_filename),
-                                'price'         => !empty($_POST['price']) ? floatval($validate->test_input($_POST['price'])) : null,                      
+                                'name'          => !empty($_POST['name']) ? $this->validate->test_input($_POST['name']) : null,
+                                'description'   => !empty($_POST['description']) ? $this->validate->test_input($_POST['description']) : null,                        
+                                'id_category'   => !empty($_POST['category']) ? intval($this->validate->test_input($_POST['category'])) : null,
+                                'image'         => $this->commonTask->getWebPath($upload_filename),
+                                'price'         => !empty($_POST['price']) ? floatval($this->validate->test_input($_POST['price'])) : null,                      
                             ];                                                  
                         }
 
-                        $query->updateRegistry('products', $fields, 'id', $id);
+                        $this->query->updateRegistry('products', $fields, 'id', $id);
 
                         $this->render('products/new_product_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
@@ -398,17 +384,13 @@
                     throw new \Exception("Unauthorized access!", 1);
                 }
                 
-                if(empty($id)) throw new \Exception("There are any product to edit.", 1);
-
-                // Build objects
-                $query = new Query;
-                $commonTask = new CommonTasks;
+                if(empty($id)) throw new \Exception("There are any product to edit.", 1);                
 
                 // Get product to delete
-                $product = $query->selectOneBy('products', 'id', $id);
+                $product = $this->query->selectOneBy('products', 'id', $id);
 
-                $query->deleteRegistry('products', 'id', $id);
-                $commonTask->deletePicture($product['image']);
+                $this->query->deleteRegistry('products', 'id', $id);
+                $this->commonTask->deletePicture($product['image']);
 
                 $this->render('products/index_view.twig', [
                     'menus'     =>    $this->showNavLinks(),

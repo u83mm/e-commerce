@@ -9,17 +9,19 @@
 
     class CategoryController extends Controller
     {
-        public function __construct(private array $categories = [])
+        public function __construct(
+            private array $categories = [],
+            private Query $query = new Query,
+            private Validate $validate = new Validate,
+        )
         {
             
         }
 
         /** Retrieves categories from the database and renders them in a view. */
         public function index() : void {
-            try {                
-                $query = new Query;
-
-                $this->categories = $query->selectAll('category');                
+            try {                                
+                $this->categories = $this->query->selectAll('category');                
 
                 $this->render('categories/index_view.twig', [
                     'menus'     =>    $this->showNavLinks(),
@@ -53,18 +55,15 @@
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
                     throw new \Exception("Unauthorized access!", 1);
-                }
-
-                $query = new Query;
-                $validate = new Validate;
+                }                                
 
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $fields = [
-                        'category'  => $validate->test_input($_REQUEST['name']),
+                        'category'  => $this->validate->test_input($_REQUEST['name']),
                     ];
 
-                    if($validate->validate_form($fields)) {
-                        $query->insertInto('category', $fields);
+                    if($this->validate->validate_form($fields)) {
+                        $this->query->insertInto('category', $fields);
 
                         $this->render('categories/new_category_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
@@ -103,21 +102,18 @@
 
         /** Edit category */
         public function edit(string $id = "") : void {
-            try {
-                $query = new Query;
-                $validate = new Validate;
-
-                $category = $query->selectOneBy('category', 'id_category', $id);  
+            try {                
+                $category = $this->query->selectOneBy('category', 'id_category', $id);  
                 
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     $fields = [
-                        'category' => $validate->test_input($_POST['name']),
+                        'category' => $this->validate->test_input($_POST['name']),
                     ];                                         
 
-                    if($validate->validate_form($fields)) {
-                        $query->updateRegistry('category', $fields, 'id_category', $id);
+                    if($this->validate->validate_form($fields)) {
+                        $this->query->updateRegistry('category', $fields, 'id_category', $id);
 
-                        $this->categories = $query->selectAll('category');
+                        $this->categories = $this->query->selectAll('category');
 
                         $this->render('categories/index_view.twig', [
                             'menus'     =>    $this->showNavLinks(),
