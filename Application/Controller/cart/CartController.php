@@ -11,8 +11,15 @@
     use model\classes\Validate;
 
     class CartController extends Controller
-    {
-        private string $message = "";
+    {        
+
+        public function __construct(
+            private string $message = "",
+            private Validate $validate = new Validate,
+            private Query $query = new Query,
+        ) {
+            
+        }
         public function index() : void
         {                       
             try {
@@ -67,10 +74,9 @@
             
         }
 
-        public function add(string $id = "") : void 
+        public function add() : void 
         {
-            $validate = new Validate();
-            $query = new Query();            
+            global $id;
 
             try {
                 // Test privileges
@@ -85,17 +91,16 @@
                 if($_SERVER['REQUEST_METHOD'] == "POST") {
                     $fields = [
                         'product_id' => $id,
-                        'quantity'   => $validate->test_input($_POST['quantity']),
+                        'quantity'   => $this->validate->test_input($_POST['quantity']),
                     ];
 
-                    $result = $query->selectOneBy('products', 'id', $fields['product_id']);              
+                    $result = $this->query->selectOneBy('products', 'id', $fields['product_id']);              
                     $result['qty'] = $fields['quantity']; 
                     
                     $product = new Product($result);                                 
 
-                    if($validate->validate_form($fields)) { 
-                        // Add product to cart                                             
-                        //$_SESSION['cart'][$product->getId()] = serialize($product);
+                    if($this->validate->validate_form($fields)) { 
+                        // Add product to cart                                                                    
                         $_SESSION['cart'][$product->getId()] = $product;                                                 
 
                         $this->render('products/show_product_view.twig', [
@@ -111,7 +116,7 @@
                             'menus'         =>  $this->showNavLinks(),
                             'session'       =>  $_SESSION,                        
                             'active'        =>  'catalog',
-                            'error_message' =>  $validate->get_msg(),
+                            'error_message' =>  $this->validate->get_msg(),
                             'product'       =>  $product
                         ]);
                     }
@@ -137,8 +142,10 @@
             }
         }
 
-        public function remove(string $id = "") : void
+        public function remove() : void
         {
+            global $id;
+
             // Test privileges
             if(!$this->testAccess([
                 'ROLE_USER',
@@ -151,7 +158,7 @@
             try { 
                 unset($_SESSION['cart'][$id]);
                 if(count($_SESSION['cart']) == 0) unset($_SESSION['cart']);                                                         
-                header('Location: /cart');
+                header('Location: /cart/cart/index');
             }
             catch (\Throwable $th) {
                 $error_msg = [
@@ -173,8 +180,10 @@
             }            
         }
         
-        public function update(string $id = "") : void
+        public function update() : void
         {
+            global $id;
+
             // Test privileges
             if(!$this->testAccess([
                 'ROLE_USER',
@@ -182,21 +191,19 @@
             ])) {
                 header('Location: /login');
                 die;
-            }
-
-            $validate = new Validate();            
+            }             
 
             try {
                 if($_SERVER['REQUEST_METHOD'] == "POST") {
                     $fields = [
                         'product_id' => $id,
-                        'quantity'   => $validate->test_input($_POST['qty']),
+                        'quantity'   => $this->validate->test_input($_POST['qty']),
                     ];
 
-                    if($validate->validate_form($fields)) $_SESSION['cart'][$id]->setQty($fields['quantity']);                   
+                    if($this->validate->validate_form($fields)) $_SESSION['cart'][$id]->setQty($fields['quantity']);                   
                 }
 
-                header('Location: /cart');
+                header('Location: /cart/cart/index');
 
             } catch (\Throwable $th) {
                 $error_msg = [
@@ -230,7 +237,7 @@
             }
 
             unset($_SESSION['cart']);
-            header('Location: /cart');
+            header('Location: /cart/cart/index');
         }
     }    
 ?>

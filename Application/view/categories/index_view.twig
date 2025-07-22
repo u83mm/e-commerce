@@ -20,14 +20,14 @@
                     <tr>
                         <td>{{ category.category|capitalize }}</td>
                         <td>
-                            <a class="btn btn-outline-success d-inline-block mb-1 mb-sm-0" href="/category/edit/{{ category.id_category }}">Edit</a>
+                            <a class="btn btn-outline-success d-inline-block mb-1 mb-sm-0" href="/category/category/edit/{{ category.id_category }}">Edit</a>
                             {{ include('categories/delete_form.twig') }}
                         </td>                                                                              
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
-            <a class="btn btn-outline-primary" href="/category/new">Add Category</a>
+            <a class="btn btn-outline-primary" href="/category/category/new">Add Category</a>
         </fieldset>
     </section>
 {% endblock main %}
