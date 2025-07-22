@@ -287,6 +287,19 @@ figcaption {
 	vertical-align: middle;
 }
 
+.dashboard {
+	display: flex;
+	justify-content: space-evenly;
+	margin-top: 0.5em;
+}
+
+.dashboard fieldset {
+	width: 25%;
+	border: 1px solid burlywood;
+	border-radius: 0.5em;
+	padding: 0.5em;
+}
+
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
 	.home-images-main {

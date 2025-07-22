@@ -74,8 +74,10 @@
             
         }
 
-        public function add(string $id = "") : void 
-        {                  
+        public function add() : void 
+        {
+            global $id;
+
             try {
                 // Test privileges
                 if(!$this->testAccess([
@@ -140,8 +142,10 @@
             }
         }
 
-        public function remove(string $id = "") : void
+        public function remove() : void
         {
+            global $id;
+
             // Test privileges
             if(!$this->testAccess([
                 'ROLE_USER',
@@ -154,7 +158,7 @@
             try { 
                 unset($_SESSION['cart'][$id]);
                 if(count($_SESSION['cart']) == 0) unset($_SESSION['cart']);                                                         
-                header('Location: /cart');
+                header('Location: /cart/cart/index');
             }
             catch (\Throwable $th) {
                 $error_msg = [
@@ -176,8 +180,10 @@
             }            
         }
         
-        public function update(string $id = "") : void
+        public function update() : void
         {
+            global $id;
+
             // Test privileges
             if(!$this->testAccess([
                 'ROLE_USER',
@@ -197,7 +203,7 @@
                     if($this->validate->validate_form($fields)) $_SESSION['cart'][$id]->setQty($fields['quantity']);                   
                 }
 
-                header('Location: /cart');
+                header('Location: /cart/cart/index');
 
             } catch (\Throwable $th) {
                 $error_msg = [
@@ -231,7 +237,7 @@
             }
 
             unset($_SESSION['cart']);
-            header('Location: /cart');
+            header('Location: /cart/cart/index');
         }
     }    
 ?>

@@ -15,15 +15,15 @@
         {% else %}            
             <div class="row mb-3">
                 <div class="col-12 text-end">
-                    <a href="/cart/clear"><img height="40" src="/images/trash.webp" alt="empty cart"></a>                                  
+                    <a href="/cart/cart/clear"><img height="40" src="/images/trash.webp" alt="empty cart"></a>                                  
                 </div>                
                 <div class="col-12 col-xl-9 mx-auto">  
                     {% set currency = "€" %}                  
                     {% for product in products %}
                     <hr>
-                    <form class="col-12" action="/cart/update/{{ product.id }}" method="post">
+                    <form class="col-12" action="/cart/cart/update/{{ product.id }}" method="post">
                         <div class="col-12 mb-2 m-md-0 col-md-1 d-inline-block text-center">
-                            <a href="/products/show/{{ product.id }}"><img class="cart-items p-1" src="{{ product.image }}" alt="Product {{ product.id }}"></a>
+                            <a href="/products/products/show/{{ product.id }}"><img class="cart-items p-1" src="{{ product.image }}" alt="Product {{ product.id }}"></a>
                         </div>
                         <div class="col-12 mb-2 m-md-0 col-md-3 col-lg-3 d-inline-block text-center">
                             {{ product.name }}
@@ -35,7 +35,7 @@
                             {{ product.price * product.qty ~ "%s"|format(currency) }}
                         </div>                                 
                         <div class="col-12 mb-2 m-md-0 col-md-4 d-inline-block text-center">
-                            <a class="btn btn-outline-danger" href="/cart/remove/{{ product.id }}">Delete</a>
+                            <a class="btn btn-outline-danger" href="/cart/cart/remove/{{ product.id }}">Delete</a>
                             <input class="btn btn-outline-success" type="submit" value="Update">
                         </div>
                     </form>                    
@@ -46,8 +46,8 @@
             <div class="row">
                 <div class="col-12 col-xl-9 mx-auto text-end">                    
                     <p>Total: <strong class="p-1">{{ total ~ "%s"|format(currency) }}</strong></p>
-                    <a class="btn btn-outline-success" href="/products">Continue shopping</a>
-                    <a class="btn btn-outline-success" href="/cart/checkout">Checkout</a>
+                    <a class="btn btn-outline-success" href="/products/products/index">Continue shopping</a>
+                    <a class="btn btn-outline-success" href="/cart/cart/checkout">Checkout</a>
                 </div>                
             </div>  
 

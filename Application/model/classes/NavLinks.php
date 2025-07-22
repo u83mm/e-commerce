@@ -13,8 +13,8 @@
             $this->menus = [
                 "Home"				=>	"/",				
 				"Registration"		=> 	"/register",
-				"Administration"	=>	"/admin",	
-                'Catalog'           =>  "/products",			
+				"Administration"	=>	"/admin/admin/index",	
+                'Catalog'           =>  "/products/products/index",			
 				"Login"			    => 	"/login",
             ];
 
@@ -27,7 +27,7 @@
             $this->menus = [
                 "Home"				=>	"/",				
 				"Registration"		=> 	"/register",
-                'Catalog'           =>  "/products",				
+                'Catalog'           =>  "/products/products/index",				
 				"Login"			    => 	"/login",
             ];
 

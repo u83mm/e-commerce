@@ -6,28 +6,37 @@
 
 {% block main %}
     <h4>Admin view</h4>
-    <section class="row mb-3 justify-content-evenly">
-        <fieldset class="col-12 col-md-5 rounded shadow p-5 mb-4">
+    <section class="row dashboard">
+        <fieldset>
             <legend><h5 class="text-center">Manage Products</h5></legend>
             <ul>
                 <li>
-                    <a href="/products">Show products</a>
+                    <a href="/products/products/index">Show products</a>
                 </li>
                 <li>
-                    <a href="/products/new">Create Product</a>
+                    <a href="/products/products/new">Create Product</a>
                 </li>
             </ul>                        
         </fieldset> 
         
-        <fieldset class="col-12 col-md-5 rounded shadow p-5 mb-4">
+        <fieldset>
             <legend><h5 class="text-center">Manage Categories</h5></legend>
             <ul>
                 <li> 
-                    <a href="/category">Show categories</a>
+                    <a href="/category/category/index">Show categories</a>
                 </li>
                 <li>
-                    <a href="/category/new">Create Category</a>
+                    <a href="/category/category/new">Create Category</a>
                 </li>
+            </ul>                       
+        </fieldset>
+
+        <fieldset>
+            <legend><h5 class="text-center">Manage Documents</h5></legend>
+            <ul>
+                <li> 
+                    <a href="/admin/document/upload">Upload Documents</a>
+                </li>                
             </ul>                       
         </fieldset>
     </section>   

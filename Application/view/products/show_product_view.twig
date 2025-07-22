@@ -17,17 +17,17 @@
             {% set currency = '€' %}
             <p>Price: {{ product.price ~ "%s"|format(currency) }}</p>
 
-            <form action="/cart/add/{{ product.id }}" method="post">                
+            <form action="/cart/cart/add/{{ product.id }}" method="post">                
                 <input class="form-control mb-2" type="number" name="quantity" id="quantity" min="1" value="0"><span></span>
                 <input class="add_to_cart_icon" type="image" src="/images/shopping-cart1.svg" height="20" alt="add to cart" title="Add to cart">                
             </form>   
 
             <p>Category: {{ product.category|capitalize }}</p>
-            <a class="btn btn-outline-primary" href="/cart">View cart</a>
+            <a class="btn btn-outline-primary" href="/cart/cart/index">View cart</a>
             {% if session.role == 'ROLE_ADMIN' %}
-                <a class="btn btn-outline-primary" href="/products/edit/{{ product.id }}">Edit product</a>
+                <a class="btn btn-outline-primary" href="/products/products/edit/{{ product.id }}">Edit product</a>
                 {{ include('products/delete_form.twig') }}
-                <a class="btn btn-outline-secondary mt-md-2 mt-lg-0" href="/products">Volver</a>
+                <a class="btn btn-outline-secondary mt-md-2 mt-lg-0" href="/products/products/index">Volver</a>
             {% endif %}
         </article>
     </section>    
