@@ -79,38 +79,7 @@
 				else {
 					$this->method = "index";
 				}
-			}
-
-            /** select controller */
-            /* $filename = SITE_ROOT . "/../Application/Controller/" . ucfirst($url[0]) . "Controller.php"; 
-            
-            if(!file_exists($filename)) {
-                $filename = SITE_ROOT . "/../Application/Controller/$url[0]/" . ucfirst($url[0]) . "Controller.php";                
-            } */
-            
-            /** build route to controller */            
-            /* $controller_path = str_replace(['/var/www/public/..', '.php'], '', $filename); 
-            $controller_path = str_replace('/', '\\', $controller_path);            
-            
-            if(file_exists($filename)) {                                                       
-                $this->controller = ucfirst($url[0]);                         
-                array_shift($url);                               
-            }
-            else {                
-                $this->controller = "ErrorController";
-                $controller_path = '\Application\Controller\\' . ucfirst($this->controller); 
-            } */
-            
-            /** build controller */                                     
-            //$controller = new $controller_path();                        
-            
-            /** select method */
-            /* if(count($url) > 0) {
-                if(method_exists($controller, $url[0])) {
-                    $this->method = $url[0];
-                    array_shift($url);
-                }
-            } */
+			}            
                                 
             call_user_func_array([$controller, $this->method], []);
         }
