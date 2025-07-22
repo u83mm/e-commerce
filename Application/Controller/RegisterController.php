@@ -13,39 +13,38 @@
     {
         public function __construct(
             private array $fields = [],
+            private Validate $validate = new Validate,
+            private Query $query = new Query
         ) {
             
         }
         /** Show register view */
-        public function index(): void {
-            $validate = new Validate;  
-            $query = new Query;                       
-
+        public function index(): void {                            
             try {                
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {                                       
                     // Get values from register form                  
                     $this->fields = [
-                        'userName'          =>  $validate->test_input(strtolower($_REQUEST['user_name'])),
-                        'email'             =>  $validate->test_input(strtolower($_REQUEST['email'])),
-                        'password'          =>  $validate->test_input($_REQUEST['password']),
-                        'repeatPassword'    =>  $validate->test_input($_REQUEST['repeat_password']),
-                        'terms'             =>  isset($_REQUEST['terms']) ? $validate->test_input($_REQUEST['terms']) : "",                        
+                        'userName'          =>  $this->validate->test_input(strtolower($_REQUEST['user_name'])),
+                        'email'             =>  $this->validate->test_input(strtolower($_REQUEST['email'])),
+                        'password'          =>  $this->validate->test_input($_REQUEST['password']),
+                        'repeatPassword'    =>  $this->validate->test_input($_REQUEST['repeat_password']),
+                        'terms'             =>  isset($_REQUEST['terms']) ? $this->validate->test_input($_REQUEST['terms']) : "",                        
                     ];                     
                     
-                    if(!$validate->validate_csrf_token()) {                         
+                    if(!$this->validate->validate_csrf_token()) {                         
 
                         $data = [
                             'error_message' =>  "Invalid CSRF token",
                             'fields'        =>  $this->fields,
                             'menus'         =>  $this->showNavLinks(),
                             'active'        =>  'registration',
-                            'csrf_token'    =>  $validate
+                            'csrf_token'    =>  $this->validate
                         ];
                     }
                     else {
-                        if($validate->validate_form($this->fields)) {
+                        if($this->validate->validate_form($this->fields)) {
                             // Test if the e-mail is in use by other user
-                            $result = $query->selectOneBy('users', 'email', $this->fields['email']);
+                            $result = $this->query->selectOneBy('users', 'email', $this->fields['email']);
     
                             if($result) {                                                              
                                 $data = [
@@ -54,7 +53,7 @@
                                     'menus'         =>  $this->showNavLinks(),
                                     'session'       =>  $_SESSION,
                                     'active'        =>  'registration',
-                                    'csrf_token'    =>  $validate
+                                    'csrf_token'    =>  $this->validate
                                 ];                                
                             }
                             else {
@@ -66,7 +65,7 @@
                                         'error_message'     =>  "Passwords are not equals", 
                                         'fields'            =>  $this->fields,                                    
                                         'active'            =>  'registration',
-                                        'csrf_token'        =>  $validate
+                                        'csrf_token'        =>  $this->validate
                                     ];                        
                                 }
                                 else {
@@ -83,14 +82,14 @@
                                         'session'       =>  $_SESSION,
                                         'message'       =>  "User registered successfully",
                                         'active'        =>  'registration', 
-                                        'csrf_token'    =>  $validate
+                                        'csrf_token'    =>  $this->validate
                                     ];
                                 }
                             } 
                         }
                         else {                        
                             $data = [
-                                'error_message' =>  $validate->get_msg(),
+                                'error_message' =>  $this->validate->get_msg(),
                                 'fields'        =>  $this->fields,
                                 'menus'         =>  $this->showNavLinks(),
                                 'active'        =>  'registration',
@@ -106,7 +105,7 @@
                     'session'       =>  $_SESSION,
                     'active'        =>  'registration',
                     'fields'        =>  $this->fields,
-                    'csrf_token'    =>  $validate
+                    'csrf_token'    =>  $this->validate
                 ]);
 
             } catch (\Throwable $th) {
