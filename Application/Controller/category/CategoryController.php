@@ -101,8 +101,10 @@
         }
 
         /** Edit category */
-        public function edit(string $id = "") : void {
-            try {                
+        public function edit() : void {
+            try {
+                global $id;
+
                 $category = $this->query->selectOneBy('category', 'id_category', $id);  
                 
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -153,8 +155,10 @@
         }
 
         /** Delete a category */
-        public function delete(string $id = "") : void {
+        public function delete() : void {
             try {
+                global $id;
+                
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
                     throw new \Exception("Unauthorized access!", 1);

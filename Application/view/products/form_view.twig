@@ -1,4 +1,4 @@
-<form action="{% if product is defined %} /products/edit/{{ product.id }} {% else %} /products/new {% endif %}" method="post" enctype="multipart/form-data">
+<form action="{% if product is defined %} /products/products/edit/{{ product.id }} {% else %} /products/products/new {% endif %}" method="post" enctype="multipart/form-data">
     <!-- Name -->
 
     <div class="col-12 col-sm-2 col-md-4 col-lg-3 d-inline-block text-center text-md-end">

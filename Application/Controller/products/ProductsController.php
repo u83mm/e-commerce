@@ -15,7 +15,8 @@
             private array $categories = [],
             private Query $query = new Query,
             private Validate $validate = new Validate,
-            private CommonTasks $commonTask = new CommonTasks,            
+            private CommonTasks $commonTask = new CommonTasks,
+            private string $message = "",            
         ) 
         {
 
@@ -154,11 +155,11 @@
                         $this->query->insertInto('products', $fields);
 
                         $this->render('products/new_product_view.twig', [
-                            'menus'     =>    $this->showNavLinks(),
-                            'session'   =>    $_SESSION,
-                            'active'    =>    'administration',
-                            'categories'    =>  $this->categories,                            
-                            'message'   =>    "Product saved successfully!",
+                            'menus'      => $this->showNavLinks(),
+                            'session'    => $_SESSION,
+                            'active'     => 'administration',
+                            'categories' => $this->categories,                            
+                            'message'    => "Product saved successfully!",
                         ]);                        
                     }
                     else {
@@ -202,7 +203,9 @@
         }
 
         /** Show product */
-        public function show(string $id = "") : void {  
+        public function show() : void {
+            global $id;
+
             try {                
                 if(empty($id)) throw new \Exception("There are any product to show.", 1);                
 
@@ -212,7 +215,8 @@
                     'menus'     =>  $this->showNavLinks(),
                     'session'   =>  $_SESSION,
                     'active'    =>  'catalog', 
-                    'product'   =>  $product,                   
+                    'product'   =>  $product,
+                    'message'   =>  $this->message,                   
                 ]);
 
             } catch (\Throwable $th) {
@@ -237,7 +241,9 @@
         }
 
         /** Edit product */
-        public function edit(string $id = "") : void {
+        public function edit() : void {
+            global $id;
+
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
@@ -338,14 +344,8 @@
                         }
 
                         $this->query->updateRegistry('products', $fields, 'id', $id);
-
-                        $this->render('products/new_product_view.twig', [
-                            'menus'     =>    $this->showNavLinks(),
-                            'session'   =>    $_SESSION,
-                            'active'    =>    'administration',
-                            'categories'=>    $this->categories,                            
-                            'message'   =>    "Product updated successfully!",
-                        ]); 
+                        $this->message = "Product updated successfully!";
+                        $this->show(); 
                     }                                       
                 }
                 
@@ -377,7 +377,9 @@
         }
 
         /** Delete product */
-        public function delete(string $id = "") : void {
+        public function delete() : void {
+            global $id;
+
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
