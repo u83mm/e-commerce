@@ -4,9 +4,9 @@
     namespace Application\Controller\products;
 
     use App\Core\Controller;
-    use model\classes\CommonTasks;
-    use model\classes\Query;
-    use model\classes\Validate;
+    use App\model\classes\CommonTasks;
+    use App\model\classes\Query;
+    use App\model\classes\Validate;
 
     class ProductsController extends Controller
     {
@@ -332,7 +332,7 @@
                             }
 
                             // Delete old picture and add the new one.
-                            $this->commonTask->deletePicture($product['image']); 
+                            $this->commonTask->deleteFileFromServer($product['image']); 
 
                             $fields = [
                                 'name'          => !empty($_POST['name']) ? $this->validate->test_input($_POST['name']) : null,
@@ -392,7 +392,7 @@
                 $product = $this->query->selectOneBy('products', 'id', $id);
 
                 $this->query->deleteRegistry('products', 'id', $id);
-                $this->commonTask->deletePicture($product['image']);
+                $this->commonTask->deleteFileFromServer($product['image']);
 
                 $this->render('products/index_view.twig', [
                     'menus'     =>    $this->showNavLinks(),

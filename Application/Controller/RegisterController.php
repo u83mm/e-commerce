@@ -6,8 +6,8 @@
     use App\Core\Controller;
     use Application\model\User;
     use Application\Repository\UserRepository;
-    use model\classes\Query;
-    use model\classes\Validate;
+    use App\model\classes\Query;
+    use App\model\classes\Validate;
 
     class RegisterController extends Controller 
     {

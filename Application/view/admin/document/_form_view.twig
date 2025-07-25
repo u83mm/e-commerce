@@ -1,0 +1,37 @@
+<form id="pdfUploadForm" class="credentials" action="#" method="post" enctype="multipart/form-data">
+    <!-- <div class="form-group">
+        <label for="document_name">Document Name <span class="required">*</span></label>
+        <input type="text" id="document_name" name="document_name" value="{% if fields is defined %}{{ fields.DocumentName }}{% endif %}" placeholder="Enter document name">
+    </div> -->
+    
+    <div class="form-group">
+        <label for="uploader_name">Your Name <span class="required">*</span></label>
+        <input type="text" id="uploader_name" name="uploader_name" value="{%  if fields is defined %}{{ fields.YourName }}{% endif %}" placeholder="Enter your full name" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="uploader_email">Your Email <span class="required">*</span></label>
+        <input type="email" id="uploader_email" name="uploader_email" value="{%  if fields is defined %}{{ fields.email }}{% endif %}" placeholder="Enter your email address" required>
+    </div>
+    
+    <div class="form-group">
+        <label for="document_description">Document Description</label>
+        <textarea id="document_description" name="document_description" placeholder="Optional description of the document"></textarea>
+    </div>
+    
+    <div class="form-group">
+        <label for="pdf_file">PDF File <span class="required">*</span></label>
+        <input type="hidden" name="MAX_FILE_SIZE" value="3000000" />
+        <input type="file" id="pdf_file" name="pdf_file" accept=".pdf" required>
+        <p class="file-requirements">Only PDF files are accepted. Maximum file size: 3MB.</p>
+    </div>
+    
+    <div class="form-group">
+        <label>
+            <input type="checkbox" name="terms_agreement" {% if fields is defined and fields.terms_agreement == 'on' %}checked{% endif %} required>
+            I agree that this document will be digitally signed and stored securely.
+        </label>
+    </div>
+    
+    <button type="submit">Upload Document</button>
+</form>

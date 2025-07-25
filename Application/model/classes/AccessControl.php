@@ -1,5 +1,7 @@
-<?php
-    namespace model\classes;
+<?php   
+    declare(strict_types=1);
+
+    namespace App\model\classes;
 
     trait AccessControl
     {

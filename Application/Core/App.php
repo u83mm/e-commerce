@@ -24,8 +24,8 @@
         }
 
         public function loadController(): void {            
-            session_start();
-            session_regenerate_id();
+           /*  session_start();
+            session_regenerate_id(); */
             
             global $id;
 

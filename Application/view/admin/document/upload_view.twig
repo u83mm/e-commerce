@@ -1,0 +1,13 @@
+{% extends "base.twig" %}
+
+{% block title %}
+    E-commerce | Upload Documents
+{% endblock title %}
+
+{% block main %}    
+    <section id="pdfUpload">
+        <h2>Upload Documents</h2>
+        <p>Please upload your PDF document for digital signing.</p>
+        {% include "admin/document/_form_view.twig" %}
+    </section>   
+{% endblock main %}
