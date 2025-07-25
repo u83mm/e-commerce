@@ -3,12 +3,10 @@
 	define("SITE_ROOT", $_SERVER['DOCUMENT_ROOT']);
 
 	/** Define URL */
-	define('URL', $_SERVER['REQUEST_URI']);		
-
-	require_once(SITE_ROOT . '/../vendor/autoload.php');
+	define('URL', $_SERVER['REQUEST_URI']);			
 
 	/** Configure directories to load their classes */
-	//\Application\model\classes\Loader::init(SITE_ROOT . "/..");
+	\Application\model\classes\Loader::init(SITE_ROOT . "/..");
 		
 	/** Define path to save uploaded images files */
 	define('STORAGE_IMAGES_PATH', SITE_ROOT . "/uploads/images");

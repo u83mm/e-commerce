@@ -1,5 +1,5 @@
 <?php
-    namespace App\model\classes;
+    namespace Application\model\classes;
 
     class CommonTasks
     {

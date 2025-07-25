@@ -4,8 +4,8 @@
     namespace Application\Controller\category;
 
     use App\Core\Controller;    
-    use App\model\classes\Query;
-    use App\model\classes\Validate;
+    use Application\model\classes\Query;
+    use Application\model\classes\Validate;
 
     class CategoryController extends Controller
     {

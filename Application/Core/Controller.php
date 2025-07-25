@@ -2,8 +2,8 @@
 
     namespace App\Core;
 
-use App\model\classes\AccessControl;
-use App\model\classes\NavLinks;  
+use Application\model\classes\AccessControl;
+use Application\model\classes\NavLinks;
 
     class Controller    
     {
@@ -63,7 +63,7 @@ use App\model\classes\NavLinks;
                $nav_links['Logout'] = '/logout';
             }
             else {
-                $nav_links = $this->user();
+                $nav_links = $this->visitor();
             }
 
             return $nav_links;

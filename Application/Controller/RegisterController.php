@@ -6,15 +6,15 @@
     use App\Core\Controller;
     use Application\model\User;
     use Application\Repository\UserRepository;
-    use App\model\classes\Query;
-    use App\model\classes\Validate;
+    use Application\model\classes\Query;
+    use Application\model\classes\Validate;
 
     class RegisterController extends Controller 
     {
         public function __construct(
             private array $fields = [],
             private Validate $validate = new Validate,
-            private Query $query = new Query
+            private Query $query = new Query()
         ) {
             
         }
