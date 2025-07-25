@@ -6,8 +6,7 @@
 
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../Application/Core/aplication_fns.php");
 
-	$loader = new Loader();
-	$loader->init($_SERVER['DOCUMENT_ROOT'] . "/..");	
+	$loader = new Loader([$_SERVER['DOCUMENT_ROOT'] . "/.."]);	
 	
-	$app = new App;
+	$app = new App();
 	$app->loadController();

@@ -9,5 +9,8 @@
 	# Clean Apache acces.log and error.log
 	require_once(SITE_ROOT . "/../Application/Cron_jobs/clean_access_log.php");  
 	require_once(SITE_ROOT . "/../Application/Cron_jobs/clean_error_log.php");
-	require_once(SITE_ROOT . "/../Application/Cron_jobs/clean_xdebug_log.php"); 		 		
+	require_once(SITE_ROOT . "/../Application/Cron_jobs/clean_xdebug_log.php"); 
+	
+	# Route to certs
+	require_once(SITE_ROOT . "/../Application/Core/app_certs_path.php");
 ?>

@@ -1,8 +1,7 @@
-<?php	
-	use Database\Connection;	
+<?php
 
-	\Application\model\classes\Loader::init(__DIR__ . "/..");	
-		
+	use App\Database\Connection;
+
 	define('DB_CONFIG_FILE', SITE_ROOT . '/../Application/Core/db.config.php');				
 	
 	try {

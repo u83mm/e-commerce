@@ -1,0 +1,33 @@
+{% extends "base.twig" %}
+
+{% block title %}
+    E-commerce | Show Documents
+{% endblock title %}
+
+{% block main %}    
+    <section>
+        <h2>Show Documents</h2>
+        <table id="documents-table" class="">
+            <thead>
+                <tr>
+                    <th>Document</th>
+                    <th>Options</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for document in documents %}
+                    <tr>
+                        <td>{{ document.document_name }}</td>
+                        <td class="options">
+                            <a href="/admin/document/download/{{ document.document_id }}">Download</a> |
+                            <a target="_blank" href="{{ document.file_path }}/{{ document.document_name }}">View</a> |
+                            <a target="_blank" href="/admin/document/digitallySign/{{ document.document_id }}">Digital Sign</a> |
+                            <!-- <a href="/admin/document/delete/{{ document.document_id }}">Delete</a> -->
+                            {% include "/admin/document/_delete_form.twig" %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>        
+    </section>   
+{% endblock main %}
