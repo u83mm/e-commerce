@@ -7,8 +7,8 @@
 
     use App\Core\Controller;
     use Application\model\Product;
-    use App\model\classes\Query;
-    use App\model\classes\Validate;
+    use Application\model\classes\Query;
+    use Application\model\classes\Validate;
 
     class CartController extends Controller
     {        

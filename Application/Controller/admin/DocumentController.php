@@ -5,9 +5,9 @@ declare(strict_types=1);
 namespace Application\Controller\admin;
 
 use App\Core\Controller;
-use App\model\classes\CommonTasks;
-use App\model\classes\Query;
-use App\model\classes\Validate;
+use Application\model\classes\CommonTasks;
+use Application\model\classes\Query;
+use Application\model\classes\Validate;
 use setasign\Fpdi\Tcpdf\Fpdi;
 
 final class DocumentController extends Controller
@@ -122,7 +122,7 @@ final class DocumentController extends Controller
 
         try {
             // Test for authorized access
-            if(!$this->testAccess(['ROLE_ADMIN'])) {
+            if(!$this->testAccess(['ROLE_ADMIN', 'ROLE_USER'])) {
                 throw new \Exception("Unauthorized access!", 1);
             }
 
@@ -170,14 +170,16 @@ final class DocumentController extends Controller
         
         try {
             // Test for authorized access
-            if(!$this->testAccess(['ROLE_ADMIN'])) {
+            if(!$this->testAccess(['ROLE_ADMIN', 'ROLE_USER'])) {
                 throw new \Exception("Unauthorized access!", 1);
             }            
 
+            // Set the path to your private key and certificate
             $privateKeyPath  = 'file://' . realpath(PRIVATE_KEY_PATH);
             $certificatePath = 'file://' . realpath(CERTIFICATE_PATH);
             $certificatePass = PRIVATE_KEY_PASS;
 
+            // Get the uploaded file
             $uploadedFile = $this->query->selectOneBy('documents', 'document_id', $id);
             $originalName = "uploads/documents/" . $uploadedFile['document_name'];            
 
@@ -190,6 +192,7 @@ final class DocumentController extends Controller
                 throw new \Exception("Certificate file not found.", 1);
             }            
             
+            // Create a new PDF document
             $pdf = new Fpdi();
 
             $pageCount = $pdf->setSourceFile($originalName);
@@ -202,8 +205,8 @@ final class DocumentController extends Controller
             }
 
             // Set document information
-            $pdf->SetCreator('Your App');
-            $pdf->SetAuthor('Your Name');
+            $pdf->SetCreator('Ecommerce Web');
+            $pdf->SetAuthor('Mario Moreno');
             $pdf->SetTitle('Signed Document');
 
             // Add a page
@@ -212,21 +215,26 @@ final class DocumentController extends Controller
             // Set certificate info
             $pdf->setSignature(
                 $certificatePath,
-                $certificatePath,
+                $privateKeyPath,
                 $certificatePass,
                 '',  // empty reason
                 3,
                 [
-                    'Name' => 'Your Company',
-                    'Location' => 'Your Location',
-                    'Reason' => 'Document Authentication',
-                    'ContactInfo' => 'contact@yourdomain.com'
+                    'Name'        => 'Ecommerce Web',
+                    'Location'    => 'Valencia',
+                    'Reason'      => 'Document Authentication',
+                    'ContactInfo' => 'cursotecnoweb@gmail.com'
                 ]
             );
 
+            // Signed text
+            $signedText = "This document has been digitally signed to petition of the user <strong>" . ucfirst($_SESSION['user_name']) . 
+                            "</strong> on " . date('Y-m-d H:i:s') . ".";
+
             // Add some content
             $pdf->SetFont('helvetica', '', 12);
-            $pdf->Cell(0, 10, 'This document has been digitally signed', 0, 1);
+            //$pdf->Cell(0, 10, $signedText, 0, 1, 1);
+            $pdf->writeHTML($signedText, true, false, true, false, '');
 
             // Output the signed PDF
             $pdf->Output('signed_document.pdf', 'I');
@@ -253,8 +261,14 @@ final class DocumentController extends Controller
     
     public function delete() : void
     {
-        global $id;
+        global $id;       
+
         try {
+             // Test for authorized access
+            if(!$this->testAccess(['ROLE_ADMIN'])) {
+                throw new \Exception("Unauthorized access!", 1);
+            }
+
             $document = $this->query->selectOneBy('documents', 'document_id', $id);
         
             if($document) {

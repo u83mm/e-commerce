@@ -4,9 +4,9 @@
     namespace Application\Controller\products;
 
     use App\Core\Controller;
-    use App\model\classes\CommonTasks;
-    use App\model\classes\Query;
-    use App\model\classes\Validate;
+    use Application\model\classes\CommonTasks;
+    use Application\model\classes\Query;
+    use Application\model\classes\Validate;
 
     class ProductsController extends Controller
     {

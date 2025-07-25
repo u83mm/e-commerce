@@ -1,7 +1,7 @@
 <?php
     declare(strict_types = 1);
     
-    namespace App\model\classes;
+    namespace Application\model\classes;
 
     use Application\model\classes\interfaces\ValidateInterface;
     use finfo;

@@ -1,6 +1,6 @@
 <?php
 
-	use App\Database\Connection;
+	use Application\Database\Connection;
 
 	define('DB_CONFIG_FILE', SITE_ROOT . '/../Application/Core/db.config.php');				
 	
