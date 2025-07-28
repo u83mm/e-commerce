@@ -4,7 +4,7 @@
     namespace Application\Repository;
 
     use Application\model\User;
-    use model\classes\Query;
+    use Application\model\classes\Query;
 
     class UserRepository extends Query
     {

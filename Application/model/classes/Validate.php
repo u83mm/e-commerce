@@ -1,9 +1,10 @@
 <?php
     declare(strict_types = 1);
     
-    namespace model\classes;
+    namespace Application\model\classes;
 
     use Application\model\classes\interfaces\ValidateInterface;
+    use finfo;
     use PDOException;
     use PDO;
 
@@ -48,15 +49,51 @@
         public function validate_form(array $fields): bool
         {                                         
             foreach ($fields as $key => $value) {
+                // Validate uploaded files                
+                if((is_array($value) && $key === 'pdf_file')) {
+                    $allowed_types = ['application/pdf'];
+
+                    if(!isset($_FILES['pdf_file']) || $_FILES['pdf_file']['error'] !== UPLOAD_ERR_OK) {
+                        $this->msg = $this->getUploadError($value['error']);
+                        return false; 
+                    }
+
+                    // Validate file size
+                    if($value['size'] > MAX_FILE_SIZE) {
+                        $this->msg = "File size must be less than 3MB.";
+                        return false;
+                    }
+
+                    // Check file type
+                    $finfo = new finfo(FILEINFO_MIME_TYPE);
+                    $file_mime = $finfo->file($value['tmp_name']);
+                    
+                    if (!in_array($file_mime, $allowed_types)) {
+                        $this->msg = "Only PDF files are accepted.";
+                        return false;
+                    }
+                    
+                    /* $this->msg = $this->getUploadError($value['error']);
+                    return false; */
+                }
+
+                // Validate terms and conditions
+                if($key === "terms_agreement" && !isset($value)) {
+                    $this->msg = "You must accept the terms and conditions.";
+                    return false;
+                }
+
+                // Validate required fields
                 if (empty($value) || !isset($value)) {                                                              
                     $this->msg = "'" . ucfirst($key) . "' is a required field.";  
                     return false;                                   				
                 }
 
+                // Validate e-mail
                 if($key === "email" && !$this->validate_email($value)) {
                     $this->msg = "Insert a valid e-mail.";
                     return false;
-                }
+                }                
             }
                       
             return true;
@@ -90,6 +127,19 @@
         {
             return isset($_SESSION['csrf_token'], $_POST['csrf_token'])
                 && hash_equals($_SESSION['csrf_token'], $_POST['csrf_token']);
-        }        
+        }
+        
+        private function getUploadError($error_code) {
+        $errors = [
+            UPLOAD_ERR_INI_SIZE   => 'File is too large (server limit).',
+            UPLOAD_ERR_FORM_SIZE  => 'File is too large (form limit).',
+            UPLOAD_ERR_PARTIAL    => 'File upload was incomplete.',
+            UPLOAD_ERR_NO_FILE    => 'No file was selected.',
+            UPLOAD_ERR_NO_TMP_DIR => 'Server configuration error.',
+            UPLOAD_ERR_CANT_WRITE => 'Failed to write file to disk.',
+            UPLOAD_ERR_EXTENSION  => 'File upload blocked by extension.',
+        ];
+        return $errors[$error_code] ?? 'Unknown upload error';
+    }
     }
 ?>

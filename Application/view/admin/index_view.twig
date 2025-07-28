@@ -7,6 +7,7 @@
 {% block main %}
     <h4>Admin view</h4>
     <section class="row dashboard">
+        <!-- Manage products -->
         <fieldset>
             <legend><h5 class="text-center">Manage Products</h5></legend>
             <ul>
@@ -19,6 +20,7 @@
             </ul>                        
         </fieldset> 
         
+        <!-- Manage categories -->
         <fieldset>
             <legend><h5 class="text-center">Manage Categories</h5></legend>
             <ul>
@@ -31,11 +33,15 @@
             </ul>                       
         </fieldset>
 
+        <!-- Manage documents -->
         <fieldset>
             <legend><h5 class="text-center">Manage Documents</h5></legend>
             <ul>
                 <li> 
                     <a href="/admin/document/upload">Upload Documents</a>
+                </li>
+                <li> 
+                    <a href="/admin/document/showDocuments">Show Documents</a>
                 </li>                
             </ul>                       
         </fieldset>

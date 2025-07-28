@@ -300,6 +300,72 @@ figcaption {
 	padding: 0.5em;
 }
 
+/********************* Upload documents style **********************/
+#pdfUpload {
+	text-align: center;
+}
+
+#pdfUploadForm {
+	width: 40%;
+	margin: 0 auto 2em;
+}
+
+.form-group {
+	margin-bottom: 1em;
+}
+
+#pdfUploadForm textarea,
+#pdfUploadForm input[type='file'],
+#pdfUploadForm input[type='text'],
+#pdfUploadForm input[type='email'] {
+	width: 100%;
+	padding: 0.5em;
+	border: 1px solid #ddd;
+	border-radius: 0.5em;
+	box-sizing: border-box;
+}
+
+#pdfUploadForm textarea {
+	height: 10em;
+}
+
+#pdfUploadForm textarea:focus,
+#pdfUploadForm input[type='file']:focus,
+#pdfUploadForm input[type='text']:focus,
+#pdfUploadForm input[type='email']:focus {
+	border: 2px solid darkcyan;
+}
+
+#pdfUploadForm .required {
+	color: #e74c3c;
+}
+
+#pdfUploadForm .file-requirements {	
+	margin-top: 1em;
+}
+
+#documents-table td{
+	vertical-align: middle;
+}
+
+#documents-table td .delete{
+	text-decoration: none;
+	padding: 0;
+}
+
+#documents-table thead{
+	text-align: center;
+}
+
+#documents-table .options{
+	text-align: center;
+}
+
+#documents-table {
+	margin: 0 auto;
+	width: 100%;
+}
+
 /***************** Configuración para móviles **********************/
 @media (max-width:480px) {
 	.home-images-main {
@@ -319,6 +385,9 @@ figcaption {
 		width: 100%;
 	}
 	
+	#pdfUploadForm {
+		width: 100%;
+	}
 }
 
 /************************************************************************
@@ -335,13 +404,19 @@ figcaption {
 	.show-product img, .edit-product figure {
 		height: 15em;
 	}
+
+	#pdfUploadForm {
+		width: 60%;
+	}
 }
 
 /***************************************************************
 *		Configuración para tablets landscape (horizontal)	   *
 ***************************************************************/
 @media (min-width: 769px) and (max-width: 1050px) {
-	
+	#pdfUploadForm {
+		width: 50%;
+	}	
 }
 
 /***************************************************************

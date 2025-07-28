@@ -1,5 +1,7 @@
-<?php
-    namespace model\classes;
+<?php    
+    declare(strict_types=1);
+
+    namespace Application\model\classes;
 
     trait NavLinks
     {
@@ -27,11 +29,24 @@
             $this->menus = [
                 "Home"				=>	"/",				
 				"Registration"		=> 	"/register",
+                "Show documents"    =>  "/admin/document/showDocuments",
                 'Catalog'           =>  "/products/products/index",				
 				"Login"			    => 	"/login",
             ];
 
             return $this->menus;
         }
+
+        public function visitor(): array
+        {
+            $this->menus = [
+                "Home"				=>	"/",								
+                'Catalog'           =>  "/products/products/index",				
+				"Login"			    => 	"/login",
+            ];
+
+            return $this->menus;
+        }
+        
     }    
 ?>

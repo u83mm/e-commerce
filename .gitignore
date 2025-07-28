@@ -20,4 +20,10 @@
 
 ###> my files to ignore ###
 /Application/log/
+/Application/db_vol
+*.pem
+*.key
+*.crt
+*.p12
+*.csr
 ###< my files to ignore ###

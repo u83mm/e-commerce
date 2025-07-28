@@ -4,8 +4,8 @@
     namespace Application\Controller;
 
     use App\Core\Controller;
-    use model\classes\Query;
-    use model\classes\Validate;
+    use Application\model\classes\Query;
+    use Application\model\classes\Validate;
 
     class LoginController extends Controller
     {    
