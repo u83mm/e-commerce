@@ -16,6 +16,7 @@ final class DocumentController extends Controller
         private Validate $validate = new Validate,
         private Query $query = new Query,
         private string $message = "",
+        private string $error_message = "",
         private CommonTasks $commonTask = new CommonTasks,
         private array $documents = [],        
     )
@@ -112,29 +113,28 @@ final class DocumentController extends Controller
     }
     
     public function showDocuments() : void
-    {
-        $variables = [
-                'menus'     =>  $this->showNavLinks(),
-                'session'   =>  $_SESSION,
-                'active'    => 'administration',
-                'documents' =>  $this->documents,
-        ];
-
+    {        
         try {
             // Test for authorized access
             if(!$this->testAccess(['ROLE_ADMIN', 'ROLE_USER'])) {
                 throw new \Exception("Unauthorized access!", 1);
             }
 
-            // We obtain all documents from DB
-            $this->documents = $this->query->selectAll('documents');
+            // Declare variables to render
+            $variables = [
+                    'menus'     =>  $this->showNavLinks(),
+                    'session'   =>  $_SESSION,
+                    'active'    => 'administration',
+                    'documents' =>  $this->query->selectAll('documents'),
+            ];
 
-            if (!$this->documents) {
+            // Set message
+            $this->message !== "" ? $variables['message'] = $this->message : $variables['error_message'] = $this->error_message;
+
+            // Test if there are documents           
+            if (empty($variables['documents'])) {
                 $variables['error_message'] = "There aren't documents to show.";                
-            }
-            else {
-                $variables['documents'] = $this->documents;
-            }
+            }            
             
             $this->render('admin/document/index_view.twig', $variables);
 
@@ -160,8 +160,7 @@ final class DocumentController extends Controller
 
     public function download() : void
     {
-        global $id;
-        $document = $this->query->selectOneBy('documents', 'document_id', $id); 
+        // code... 
     }
 
     public function digitallySign() : void
@@ -181,7 +180,7 @@ final class DocumentController extends Controller
 
             // Get the uploaded file
             $uploadedFile = $this->query->selectOneBy('documents', 'document_id', $id);
-            $originalName = "uploads/documents/" . $uploadedFile['document_name'];            
+            $originalName = STORAGE_DOCUMENTS_PATH . "/" . $uploadedFile['document_name'];            
 
             // Check for Key and Certificate files
             if (!file_exists($privateKeyPath)) {
@@ -224,7 +223,7 @@ final class DocumentController extends Controller
                     'Location'    => 'Valencia',
                     'Reason'      => 'Document Authentication',
                     'ContactInfo' => 'cursotecnoweb@gmail.com'
-                ]
+                ]                               
             );
 
             // Signed text
@@ -232,12 +231,11 @@ final class DocumentController extends Controller
                             "</strong> on " . date('Y-m-d H:i:s') . ".";
 
             // Add some content
-            $pdf->SetFont('helvetica', '', 12);
-            //$pdf->Cell(0, 10, $signedText, 0, 1, 1);
+            $pdf->SetFont('helvetica', '', 12);            
             $pdf->writeHTML($signedText, true, false, true, false, '');
 
             // Output the signed PDF
-            $pdf->Output('signed_document.pdf', 'I');
+            $pdf->Output('signed_' . $uploadedFile['document_name'], 'I');
 
         } catch (\Throwable $th) {
             $error_msg = [
@@ -261,8 +259,8 @@ final class DocumentController extends Controller
     
     public function delete() : void
     {
-        global $id;       
-
+        global $id;
+               
         try {
              // Test for authorized access
             if(!$this->testAccess(['ROLE_ADMIN'])) {
@@ -270,19 +268,19 @@ final class DocumentController extends Controller
             }
 
             $document = $this->query->selectOneBy('documents', 'document_id', $id);
+
+            if(!$document) {
+                $this->error_message = "Document not found!";
+                $this->showDocuments();
+            }
         
             if($document) {
                 $this->commonTask->deleteFileFromServer($document['file_path'] . "/" . $document['document_name']);
-                $this->query->deleteRegistry('documents', 'document_id', $id);
+                $this->query->deleteRegistry('documents', 'document_id', $id);  
+                $this->message = "Document deleted successfully!";
+                $this->showDocuments();            
             }
-
-            $this->render('admin/document/index_view.twig', [
-                'menus'     =>  $this->showNavLinks(),
-                'session'   =>  $_SESSION,
-                'active'    =>  'administration',
-                'message'   =>  "Document deleted successfully!",
-            ]);
-
+           
         } catch (\Throwable $th) {
             $error_msg = [
                 'Error:' =>  $th->getMessage(),
