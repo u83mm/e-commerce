@@ -1,5 +1,6 @@
 <?php	
-	require_once($_SERVER['DOCUMENT_ROOT'] . "/../Application/model/classes/Loader.php");
+	//require_once($_SERVER['DOCUMENT_ROOT'] . "/../Application/model/classes/Loader.php");
+	require_once $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../Application/Core/app_config.php");
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../Application/Core/connect.php");
 	require_once($_SERVER['DOCUMENT_ROOT'] . "/../Application/Core/Controller.php");
