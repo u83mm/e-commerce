@@ -1,9 +1,6 @@
 <?php
 namespace Application\model\classes;
 
-// Always load Composer autoloader first
-require_once $_SERVER['DOCUMENT_ROOT'] . '/../vendor/autoload.php';
-
 class Loader
 {
     const UNABLE_TO_LOAD = 'Unable to load class';
@@ -38,9 +35,9 @@ class Loader
     public static function autoload($class)
     {
         // Skip FPDI/TCPDF classes - let Composer handle them
-        if (strpos($class, 'setasign\\') === 0 || strpos($class, 'TCPDF') === 0) {
+        /* if (strpos($class, 'setasign\\') === 0 || strpos($class, 'TCPDF') === 0) {
             return false;
-        }
+        } */
 
         $success = false;
         $fn = str_replace('\\', DIRECTORY_SEPARATOR, $class) . '.php';
