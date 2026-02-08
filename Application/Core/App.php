@@ -74,8 +74,7 @@ use Application\model\classes\Validate;
 				$this->controller = "ErrorController";
 				$controller_path = '\Application\Controller\\' . ucfirst($this->controller);								
 			} 
-
-			//$controller = new $controller_path;
+			
 			$controller = $this->createController($controller_path);
 
 			/** select method */
