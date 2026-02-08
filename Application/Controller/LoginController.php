@@ -11,6 +11,8 @@
     {    
         
         public function __construct(
+            private Validate $validate,
+            private Query $query_object,
             private string $message = "",
             private array $limited_access_data = [],
 			private int $remaining_time = 0,
@@ -20,10 +22,7 @@
         } 
 
         public function index(): void
-        { 
-            $validate = new Validate;
-            $query_object = new Query;                     
-
+        {    
             try {
                 if(isset($_SESSION['id_user'])) {
                     header('Location: /');
@@ -32,8 +31,8 @@
 
                 if($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Test for restrictions
-					$this->limited_access_data = $query_object->selectOneBy("limit_access", "ip", $_SERVER['REMOTE_ADDR']) ? 
-                        $query_object->selectOneBy("limit_access", "ip", $_SERVER['REMOTE_ADDR']) : [];						
+					$this->limited_access_data = $this->query_object->selectOneBy("limit_access", "ip", $_SERVER['REMOTE_ADDR']) ? 
+                        $this->query_object->selectOneBy("limit_access", "ip", $_SERVER['REMOTE_ADDR']) : [];						
 
 					// If the IP is restricted, return the remaining time
 					if(count($this->limited_access_data) > 0) {						
@@ -42,20 +41,20 @@
 
                     // Get values from login form
                     $this->fields = [
-                        'email'     =>  $validate->test_input(strtolower($_REQUEST['email'])),
-                        'password'  =>  $validate->test_input($_REQUEST['password']),
+                        'email'     =>  $this->validate->test_input(strtolower($_REQUEST['email'])),
+                        'password'  =>  $this->validate->test_input($_REQUEST['password']),
                     ];
 
-                    if(!$validate->validate_csrf_token()) {
+                    if(!$this->validate->validate_csrf_token()) {
                         $this->message = "Invalid CSRF token";																					
                     }
                     else {
                         if($this->remaining_time <= 0) {                        
                             // Validate form                    
-                            if($validate->validate_form($this->fields)) {
+                            if($this->validate->validate_form($this->fields)) {
                                 if(!isset($_SESSION['id_user'])) {                                
                                     // Test user to do login                           
-                                    $result = $query_object->selectLoginUser('users', 'roles', 'id_role', $this->fields['email']);                                                       
+                                    $result = $this->query_object->selectLoginUser('users', 'roles', 'id_role', $this->fields['email']);                                                       
                                                                 
                                     if($result) {                                
                                         if(password_verify($this->fields['password'], $result['password'])) {												
@@ -64,7 +63,7 @@
                                             $_SESSION['role']       = $result['role'];
                                             
                                             // Delete the restriction time
-                                            if(isset($this->limited_access_data['id'])) $query_object->deleteRegistry("limit_access", 'id', $this->limited_access_data['id']);										
+                                            if(isset($this->limited_access_data['id'])) $this->query_object->deleteRegistry("limit_access", 'id', $this->limited_access_data['id']);										
                                                                                                             
                                             $this->render('main_view.twig', [
                                                 'menus'     =>  $this->showNavLinks(),                                     
@@ -85,7 +84,7 @@
                                         // Update the restriction time										
                                         $this->limited_access_data['failed_tries'] += 1;
                                         $this->limited_access_data['restriction_time'] = time() + (5 * 60 );											
-                                        $query_object->updateRow("limit_access", $this->limited_access_data, $this->limited_access_data['id']);
+                                        $this->query_object->updateRow("limit_access", $this->limited_access_data, $this->limited_access_data['id']);
                                     }
                                     else {
                                         $this->limited_access_data['failed_tries'] = 1;
@@ -98,8 +97,8 @@
                                             'created_at' => date('Y-m-d H:i:s')
                                         ];                                   
     
-                                        if($validate->validate_form($data)) {											
-                                            $query_object->insertInto("limit_access", $data);
+                                        if($this->validate->validate_form($data)) {											
+                                            $this->query_object->insertInto("limit_access", $data);
                                         }
                                     }                                                                        
                                 }
@@ -113,7 +112,7 @@
                             else {   
                                 $this->limited_access_data['failed_tries'] = 0;
                                 
-                                $this->message = $validate->get_msg();                                    
+                                $this->message = $this->validate->get_msg();                                    
                             }
                         }
                         else {
@@ -128,7 +127,7 @@
                     }                                       
                 }   
                 
-                $this->fields['csrf_token'] = $validate->csrf_token();
+                $this->fields['csrf_token'] = $this->validate->csrf_token();
 
                 $this->render('login/login_view.twig', [
                     'menus'             =>  $this->showNavLinks(),

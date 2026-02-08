@@ -1,16 +1,22 @@
 <?php
     namespace Core;
 
+use Application\model\classes\Query;
+use Application\model\classes\Validate;
+
     class App
     {
         public function __construct(
             private string $controller = "", 
             private string $method = "index",
             private string $route = "",
+			private array $dependencies = []
         )
         {
-            
+			$this->dependencies['validate'] = new Validate;
+			$this->dependencies['query']	= new Query();
         }
+
         private function splitUrl(): array|string {           
             $url = URL === '/' ? 'home' : URL;
             $url = explode('/', trim($url, "/")); 
@@ -68,8 +74,8 @@
 				$this->controller = "ErrorController";
 				$controller_path = '\Application\Controller\\' . ucfirst($this->controller);								
 			} 
-
-			$controller = new $controller_path;
+			
+			$controller = $this->createController($controller_path);
 
 			/** select method */
 			if(count($url) > 0) {				
@@ -83,5 +89,17 @@
                                 
             call_user_func_array([$controller, $this->method], []);
         }
+
+		private function createController(string $className): object
+		{
+			if($className === "\Application\Controller\LoginController") {
+				return new $className(
+					$this->dependencies['validate'],
+					$this->dependencies['query'],					
+				);
+			}
+
+			return new $className;
+		}
     }    
 ?>
