@@ -1,18 +1,17 @@
 <?php    
 
     namespace App\Core;
-
-use Application\model\classes\AccessControl;
-use Application\model\classes\NavLinks;
+    
+    use Application\model\classes\AccessControl;
+    use Application\model\classes\NavLinks;
 
     class Controller    
     {
     	use NavLinks;
     	use AccessControl;
 
-        public function __construct(protected object $dbcon = DB_CON)
-        {
-            
+        public function __construct()
+        {            
         }
     	
         /** Properties to use twig */

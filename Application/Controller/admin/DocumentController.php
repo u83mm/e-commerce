@@ -13,8 +13,8 @@ use setasign\Fpdi\Tcpdf\Fpdi;
 final class DocumentController extends Controller
 {
     public function __construct(
-        private Validate $validate = new Validate,
-        private Query $query = new Query,
+        private Validate $validate,
+        private Query $query,
         private string $message = "",
         private string $error_message = "",
         private CommonTasks $commonTask = new CommonTasks,
@@ -163,10 +163,8 @@ final class DocumentController extends Controller
         // code... 
     }
 
-    public function digitallySign() : void
-    {
-        global $id;                        
-        
+    public function digitallySign($id = null) : void
+    {                                     
         try {
             // Test for authorized access
             if(!$this->testAccess(['ROLE_ADMIN', 'ROLE_USER'])) {
@@ -257,10 +255,8 @@ final class DocumentController extends Controller
         }
     }
     
-    public function delete() : void
-    {
-        global $id;
-               
+    public function delete($id = null) : void
+    {                       
         try {
              // Test for authorized access
             if(!$this->testAccess(['ROLE_ADMIN'])) {

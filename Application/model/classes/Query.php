@@ -6,6 +6,10 @@
 
     class Query extends Controller
     {
+        public function __construct(private PDO $pdo)
+        {
+            
+        }
         /**
          * Select all from "table name"
          */
@@ -14,7 +18,7 @@
             $query = "SELECT * FROM $table";                 
 
             try {
-                $stm = $this->dbcon->pdo->prepare($query);               
+                $stm = $this->pdo->prepare($query);               
                 $stm->execute();       
                 $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
                 $stm->closeCursor();                
@@ -80,7 +84,7 @@
             $query = "SELECT * FROM $table WHERE $field = :val";                         
 
             try {
-                $stm = $this->dbcon->pdo->prepare($query);
+                $stm = $this->pdo->prepare($query);
                 $stm->bindValue(":val", $value);                            
                 $stm->execute();       
                 $rows = $stm->fetch(PDO::FETCH_ASSOC);
@@ -108,7 +112,7 @@
             $params[":id"] = $id;                         
                                                   
             try {
-                $stm = $this->dbcon->pdo->prepare($query);                        
+                $stm = $this->pdo->prepare($query);                        
                 $stm->execute($params);       				
                 $stm->closeCursor();                
 
@@ -138,7 +142,7 @@
             $query = "DELETE FROM $table WHERE $fieldId = :id";                 
 
             try {
-                $stm = $this->dbcon->pdo->prepare($query);             			            
+                $stm = $this->pdo->prepare($query);             			            
                 $stm->bindValue(":id", $id);              
                 $stm->execute();       				
                 $stm->closeCursor();                
@@ -159,7 +163,7 @@
                         WHERE $table1.$fieldId = :id";
                     
             try {
-                $stm = $this->dbcon->pdo->prepare($query);
+                $stm = $this->pdo->prepare($query);
                 $stm->bindValue(":id", $id);                            
                 $stm->execute();       
                 $rows = $stm->fetch(PDO::FETCH_ASSOC);            
@@ -230,7 +234,7 @@
             $query = $insert . $values;            
                                                     
             try {
-                $stm = $this->dbcon->pdo->prepare($query);
+                $stm = $this->pdo->prepare($query);
                 foreach ($fields as $key => $value) {
                     if($key === 'password') {
                         $stm->bindValue(":password", password_hash($value, PASSWORD_DEFAULT));
@@ -309,7 +313,7 @@
                         WHERE $table1.email = :val";                                    
                 
             try {
-                $stm = $this->dbcon->pdo->prepare($query);                                                   
+                $stm = $this->pdo->prepare($query);                                                   
                 $stm->execute([$email]);       
                 $rows = $stm->fetchAll(PDO::FETCH_ASSOC);
                 $stm->closeCursor();
@@ -339,7 +343,7 @@
             $query .= " WHERE id = '$id'";            
                                                     
             try {
-                $stm = $this->dbcon->pdo->prepare($query);
+                $stm = $this->pdo->prepare($query);
                 foreach ($fields as $key => $value) {
                     if($key === 'password') {
                         $stm->bindValue(":password", password_hash($value, PASSWORD_DEFAULT));

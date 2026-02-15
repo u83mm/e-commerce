@@ -10,9 +10,9 @@
     class CategoryController extends Controller
     {
         public function __construct(
-            private array $categories = [],
-            private Query $query = new Query,
-            private Validate $validate = new Validate,
+            private Validate $validate,
+            private Query $query,            
+            private array $categories = [],            
         )
         {
             
@@ -101,10 +101,8 @@
         }
 
         /** Edit category */
-        public function edit() : void {
-            try {
-                global $id;
-
+        public function edit($id = null) : void {
+            try {                
                 $category = $this->query->selectOneBy('category', 'id_category', $id);  
                 
                 if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -155,20 +153,17 @@
         }
 
         /** Delete a category */
-        public function delete() : void {
-            try {
-                global $id;
-                
+        public function delete($id = null) : void {
+            try {                                
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
                     throw new \Exception("Unauthorized access!", 1);
                 }
                 
                 if(empty($id)) throw new \Exception("There are any category to delete.", 1);
+                             
 
-                $query = new Query;                
-
-                $query->deleteRegistry('category', 'id_category', $id);
+                $this->query->deleteRegistry('category', 'id_category', $id);
 
                 $this->render('categories/index_view.twig', [
                     'menus'     =>    $this->showNavLinks(),

@@ -12,9 +12,10 @@
     class RegisterController extends Controller 
     {
         public function __construct(
-            private array $fields = [],
-            private Validate $validate = new Validate,
-            private Query $query = new Query()
+            private Validate $validate,
+            private Query $query,
+            private UserRepository $userRepository,
+            private array $fields = [],            
         ) {
             
         }
@@ -72,10 +73,9 @@
                                     // Save the user
                                     array_pop($this->fields); 
                                                                    
-                                    $user = new User($this->fields);
-                                    $userRepository = new UserRepository();
+                                    $user = new User($this->fields);                                    
     
-                                    $userRepository->save($user);
+                                    $this->userRepository->save($user);
         
                                     $data = [
                                         'menus'         =>  $this->showNavLinks(),

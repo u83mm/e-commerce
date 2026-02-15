@@ -14,9 +14,9 @@
     {        
 
         public function __construct(
-            private string $message = "",
-            private Validate $validate = new Validate,
-            private Query $query = new Query,
+            private Validate $validate,
+            private Query $query,
+            private string $message = "",            
         ) {
             
         }
@@ -74,10 +74,8 @@
             
         }
 
-        public function add() : void 
-        {
-            global $id;
-
+        public function add($id = null) : void 
+        {            
             try {
                 // Test privileges
                 if(!$this->testAccess([
@@ -142,10 +140,8 @@
             }
         }
 
-        public function remove() : void
-        {
-            global $id;
-
+        public function remove($id = null) : void
+        {            
             // Test privileges
             if(!$this->testAccess([
                 'ROLE_USER',
@@ -180,10 +176,8 @@
             }            
         }
         
-        public function update() : void
-        {
-            global $id;
-
+        public function update($id = null) : void
+        {            
             // Test privileges
             if(!$this->testAccess([
                 'ROLE_USER',
