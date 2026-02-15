@@ -1,20 +1,18 @@
 <?php
     namespace Core;
 
-use Application\model\classes\Query;
-use Application\model\classes\Validate;
+	use Application\Core\Container;
 
     class App
     {
         public function __construct(
+			private ?Container $container = null,   
             private string $controller = "", 
             private string $method = "index",
-            private string $route = "",
-			private array $dependencies = []
+            private string $route = "",			
         )
         {
-			$this->dependencies['validate'] = new Validate;
-			$this->dependencies['query']	= new Query();
+			$this->container = new Container();
         }
 
         private function splitUrl(): array|string {           
@@ -29,12 +27,7 @@ use Application\model\classes\Validate;
             return $url;
         }
 
-        public function loadController(): void {            
-           /*  session_start();
-            session_regenerate_id(); */
-            
-            global $id;
-
+        public function loadController(): void {                       
             $url = $this->splitUrl();
 
             // Test diferent options to configure to Controller                         
@@ -48,13 +41,13 @@ use Application\model\classes\Validate;
 			}
 			else if(count($url) > 2) {            
 				if(!empty($url) && preg_match('/^([0-9]){1,5}$/', $url[count($url) - 1])) {
-				$id = $url[count($url) - 1];                                                                     
-				array_pop($url);                                                     
+					$id = $url[count($url) - 1];                                                                     
+					array_pop($url);                                                     
 				}
 				
 				foreach ($url as $key => $value) {
-				if($key == count($url) - 2) break;
-				$this->route .= $value . "/";            
+					if($key == count($url) - 2) break;
+					$this->route .= $value . "/";            
 				}                          
 
 				$this->controller = ucfirst($url[count($url) - 2]);
@@ -75,7 +68,7 @@ use Application\model\classes\Validate;
 				$controller_path = '\Application\Controller\\' . ucfirst($this->controller);								
 			} 
 			
-			$controller = $this->createController($controller_path);
+			$controller = $this->container->get($controller_path);
 
 			/** select method */
 			if(count($url) > 0) {				
@@ -85,21 +78,11 @@ use Application\model\classes\Validate;
 				else {
 					$this->method = "index";
 				}
-			}            
+			}   
+			
+			$params = isset($id) ? [$id] : [];
                                 
-            call_user_func_array([$controller, $this->method], []);
-        }
-
-		private function createController(string $className): object
-		{
-			if($className === "\Application\Controller\LoginController") {
-				return new $className(
-					$this->dependencies['validate'],
-					$this->dependencies['query'],					
-				);
-			}
-
-			return new $className;
-		}
+            call_user_func_array([$controller, $this->method], $params);
+        }		
     }    
 ?>

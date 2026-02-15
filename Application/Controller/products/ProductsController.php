@@ -11,11 +11,11 @@
     class ProductsController extends Controller
     {
         public function __construct(
+            private Validate $validate,
+            private Query $query,
+            private CommonTasks $commonTask,
             private array $products = [],
-            private array $categories = [],
-            private Query $query = new Query,
-            private Validate $validate = new Validate,
-            private CommonTasks $commonTask = new CommonTasks,
+            private array $categories = [],                                    
             private string $message = "",            
         ) 
         {
@@ -203,9 +203,7 @@
         }
 
         /** Show product */
-        public function show() : void {
-            global $id;
-
+        public function show($id = null) : void {            
             try {                
                 if(empty($id)) throw new \Exception("There are any product to show.", 1);                
 
@@ -241,9 +239,7 @@
         }
 
         /** Edit product */
-        public function edit() : void {
-            global $id;
-
+        public function edit($id = null) : void {            
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {
@@ -377,9 +373,7 @@
         }
 
         /** Delete product */
-        public function delete() : void {
-            global $id;
-
+        public function delete($id = null) : void {            
             try {
                 // Test for authorized access
                 if(!$this->testAccess(['ROLE_ADMIN'])) {

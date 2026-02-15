@@ -57,7 +57,9 @@
                                     $result = $this->query_object->selectLoginUser('users', 'roles', 'id_role', $this->fields['email']);                                                       
                                                                 
                                     if($result) {                                
-                                        if(password_verify($this->fields['password'], $result['password'])) {												
+                                        if(password_verify($this->fields['password'], $result['password'])) {
+                                            session_regenerate_id();
+                                            												
                                             $_SESSION['id_user']    = $result['id'];						
                                             $_SESSION['user_name']  = $result['user_name'];
                                             $_SESSION['role']       = $result['role'];
