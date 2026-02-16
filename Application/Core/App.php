@@ -28,61 +28,65 @@
         }
 
         public function loadController(): void {                       
-            $url = $this->splitUrl();
+            try {
+				$url = $this->splitUrl();
 
-            // Test diferent options to configure to Controller                         
-			if(count($url) == 1 && !empty($url[0])){
-				$this->controller = ucfirst($url[0]);
-				$this->method = "index";
-			}
-			else if(count($url) == 2) {
-				$this->controller = ucfirst($url[0]);
-				$this->method = $url[1];       
-			}
-			else if(count($url) > 2) {            
-				if(!empty($url) && preg_match('/^([0-9]){1,5}$/', $url[count($url) - 1])) {
-					$id = $url[count($url) - 1];                                                                     
-					array_pop($url);                                                     
-				}
-				
-				foreach ($url as $key => $value) {
-					if($key == count($url) - 2) break;
-					$this->route .= $value . "/";            
-				}                          
-
-				$this->controller = ucfirst($url[count($url) - 2]);
-				$this->method = $url[count($url) - 1];                                                       
-			}
-
-            // Build the Controller
-			$this->route = "/Application/Controller/" . $this->route;        
-			$this->controller = $this->controller . "Controller";
-
-            $file_name = SITE_ROOT . "/.." . $this->route . $this->controller . ".php";
-
-			if(file_exists($file_name)) {                    
-				$controller_path = str_replace('/', '\\', $this->route) . $this->controller;                                                         
-			} 
-			else {                    
-				$this->controller = "ErrorController";
-				$controller_path = '\Application\Controller\\' . ucfirst($this->controller);								
-			} 
-			
-			$controller = $this->container->get($controller_path);
-
-			/** select method */
-			if(count($url) > 0) {				
-                if(method_exists($controller, $this->method)) {                        
-                	array_shift($url);
-                }
-				else {
+				// Test diferent options to configure to Controller                         
+				if(count($url) == 1 && !empty($url[0])){
+					$this->controller = ucfirst($url[0]);
 					$this->method = "index";
 				}
-			}   
-			
-			$params = isset($id) ? [$id] : [];
-                                
-            call_user_func_array([$controller, $this->method], $params);
+				else if(count($url) == 2) {
+					$this->controller = ucfirst($url[0]);
+					$this->method = $url[1];       
+				}
+				else if(count($url) > 2) {            
+					if(!empty($url) && preg_match('/^([0-9]){1,5}$/', $url[count($url) - 1])) {
+						$id = $url[count($url) - 1];                                                                     
+						array_pop($url);                                                     
+					}
+					
+					foreach ($url as $key => $value) {
+						if($key == count($url) - 2) break;
+						$this->route .= $value . "/";            
+					}                          
+
+					$this->controller = ucfirst($url[count($url) - 2]);
+					$this->method = $url[count($url) - 1];                                                       
+				}
+
+				// Build the Controller
+				$this->route = "/Application/Controller/" . $this->route;        
+				$this->controller = $this->controller . "Controller";
+
+				$file_name = SITE_ROOT . "/.." . $this->route . $this->controller . ".php";
+
+				if(file_exists($file_name)) {                    
+					$controller_path = str_replace('/', '\\', $this->route) . $this->controller;                                                         
+				} 
+				else {                    
+					$this->controller = "ErrorController";
+					$controller_path = '\Application\Controller\\' . ucfirst($this->controller);								
+				} 
+				
+				$controller = $this->container->get($controller_path);
+
+				/** select method */
+				if(count($url) > 0) {				
+					if(method_exists($controller, $this->method)) {                        
+						array_shift($url);
+					}
+					else {
+						$this->method = "index";
+					}
+				}   
+				
+				$params = isset($id) ? [$id] : [];
+									
+				call_user_func_array([$controller, $this->method], $params);
+			} catch (\Throwable $th) {
+				\Application\Core\ErrorHandler::handle($th, $controller ?? null);
+			}
         }		
     }    
 ?>
