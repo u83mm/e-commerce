@@ -14,182 +14,102 @@
             private Query $query,            
             private array $categories = [],            
         )
-        {
-            
-        }
+        {}
 
         /** Retrieves categories from the database and renders them in a view. */
-        public function index() : void {
-            try {                                
-                $this->categories = $this->query->selectAll('category');                
+        public function index() : void 
+        {
+            $this->categories = $this->query->selectAll('category');                
 
-                $this->render('categories/index_view.twig', [
-                    'menus'     =>    $this->showNavLinks(),
-                    'session'   =>    $_SESSION,
-                    'active'    =>    'administration',
-                    'categories'=>    $this->categories,                                                
-                 ]);
-            } catch (\Throwable $th) {
-                $error_msg = [
-                    'Error:' =>  $th->getMessage(),
-                ];
-
-                if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
-                    $error_msg = [
-                        "Message:"  =>  $th->getMessage(),
-                        "Path:"     =>  $th->getFile(),
-                        "Line:"     =>  $th->getLine(),
-                    ];
-                }
-
-                $this->render('error_view.twig', [
-                    'menus'             => $this->showNavLinks(),
-                    'exception_message' => $error_msg,                
-                ]);
-            }                   
+            $this->render('categories/index_view.twig', [
+                'menus'      =>  $this->showNavLinks(),
+                'session'    =>  $_SESSION,
+                'active'     =>  'administration',
+                'categories' =>  $this->categories,                                                
+            ]);               
         }
 
         /** Create a new category */
         public function new() : void {
-            try {
-                // Test for authorized access
-                if(!$this->testAccess(['ROLE_ADMIN'])) {
-                    throw new \Exception("Unauthorized access!", 1);
-                }                                
+            // Test for authorized access
+            if(!$this->testAccess(['ROLE_ADMIN'])) {
+                throw new \Exception("Unauthorized access!", 1);
+            }                                
 
-                if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $fields = [
-                        'category'  => $this->validate->test_input($_REQUEST['name']),
-                    ];
-
-                    if($this->validate->validate_form($fields)) {
-                        $this->query->insertInto('category', $fields);
-
-                        $this->render('categories/new_category_view.twig', [
-                            'menus'     =>    $this->showNavLinks(),
-                            'session'   =>    $_SESSION,
-                            'active'    =>    'administration',
-                            'message'   =>    "Category saved successfully",                    
-                        ]);
-                    }
-                }
-
-                $this->render('categories/new_category_view.twig', [
-                    'menus'     =>    $this->showNavLinks(),
-                    'session'   =>    $_SESSION,
-                    'active'    =>    'administration',                    
-                ]);
-
-            } catch (\Throwable $th) {
-                $error_msg = [
-                    'Error:' =>  $th->getMessage(),
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $fields = [
+                    'category' => $this->validate->test_input($_REQUEST['name']),
                 ];
 
-                if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
-                    $error_msg = [
-                        "Message:"  =>  $th->getMessage(),
-                        "Path:"     =>  $th->getFile(),
-                        "Line:"     =>  $th->getLine(),
-                    ];
-                }
+                if($this->validate->validate_form($fields)) {
+                    $this->query->insertInto('category', $fields);
 
-                $this->render('error_view.twig', [
-                    'menus'             => $this->showNavLinks(),
-                    'exception_message' => $error_msg,                
-                ]);
+                    $this->render('categories/new_category_view.twig', [
+                        'menus'    =>  $this->showNavLinks(),
+                        'session'  =>  $_SESSION,
+                        'active'   =>  'administration',
+                        'message'  =>  "Category saved successfully",                    
+                    ]);
+                }
             }
+
+            $this->render('categories/new_category_view.twig', [
+                'menus'    =>  $this->showNavLinks(),
+                'session'  =>  $_SESSION,
+                'active'   =>  'administration',                    
+            ]);
         }
 
         /** Edit category */
         public function edit($id = null) : void {
-            try {                
-                $category = $this->query->selectOneBy('category', 'id_category', $id);  
+            $category = $this->query->selectOneBy('category', 'id_category', $id);  
                 
-                if($_SERVER['REQUEST_METHOD'] == 'POST') {
-                    $fields = [
-                        'category' => $this->validate->test_input($_POST['name']),
-                    ];                                         
+            if($_SERVER['REQUEST_METHOD'] == 'POST') {
+                $fields = [
+                    'category' => $this->validate->test_input($_POST['name']),
+                ];                                         
 
-                    if($this->validate->validate_form($fields)) {
-                        $this->query->updateRegistry('category', $fields, 'id_category', $id);
+                if($this->validate->validate_form($fields)) {
+                    $this->query->updateRegistry('category', $fields, 'id_category', $id);
 
-                        $this->categories = $this->query->selectAll('category');
+                    $this->categories = $this->query->selectAll('category');
 
-                        $this->render('categories/index_view.twig', [
-                            'menus'     =>    $this->showNavLinks(),
-                            'session'   =>    $_SESSION,
-                            'active'    =>    'administration',
-                            'categories'=>    $this->categories,
-                            'message'   =>    "Category updated successfully",                    
-                        ]);
-                    }
+                    $this->render('categories/index_view.twig', [
+                        'menus'       =>  $this->showNavLinks(),
+                        'session'     =>  $_SESSION,
+                        'active'      =>  'administration',
+                        'categories'  =>  $this->categories,
+                        'message'     =>  "Category updated successfully",                    
+                    ]);
                 }
-
-                $this->render('categories/edit_view.twig', [
-                    'menus'     =>    $this->showNavLinks(),
-                    'session'   =>    $_SESSION,
-                    'active'    =>    'administration',
-                    'category'  =>    $category,
-                ]);
-
-            } catch (\Throwable $th) {
-                $error_msg = [
-                    'Error:' =>  $th->getMessage(),
-                ];
-
-                if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
-                    $error_msg = [
-                        "Message:"  =>  $th->getMessage(),
-                        "Path:"     =>  $th->getFile(),
-                        "Line:"     =>  $th->getLine(),
-                    ];
-                }
-
-                $this->render('error_view.twig', [
-                    'menus'             => $this->showNavLinks(),
-                    'exception_message' => $error_msg,                
-                ]);
             }
+
+            $this->render('categories/edit_view.twig', [
+                'menus'     =>  $this->showNavLinks(),
+                'session'   =>  $_SESSION,
+                'active'    =>  'administration',
+                'category'  =>  $category,
+            ]);
         }
 
         /** Delete a category */
         public function delete($id = null) : void {
-            try {                                
-                // Test for authorized access
-                if(!$this->testAccess(['ROLE_ADMIN'])) {
-                    throw new \Exception("Unauthorized access!", 1);
-                }
-                
-                if(empty($id)) throw new \Exception("There are any category to delete.", 1);
-                             
-
-                $this->query->deleteRegistry('category', 'id_category', $id);
-
-                $this->render('categories/index_view.twig', [
-                    'menus'     =>    $this->showNavLinks(),
-                    'session'   =>    $_SESSION,
-                    'active'    =>    'administration',
-                    'message'   =>    "Category deleted successfully!",                    
-                ]);
-
-            } catch (\Throwable $th) {
-                $error_msg = [
-                    'Error:' =>  $th->getMessage(),
-                ];
-
-                if(isset($_SESSION['role']) && $_SESSION['role'] === 'ROLE_ADMIN') {
-                    $error_msg = [
-                        "Message:"  =>  $th->getMessage(),
-                        "Path:"     =>  $th->getFile(),
-                        "Line:"     =>  $th->getLine(),
-                    ];
-                }
-
-                $this->render('error_view.twig', [
-                    'menus'             => $this->showNavLinks(),
-                    'exception_message' => $error_msg,                
-                ]);
+            // Test for authorized access
+            if(!$this->testAccess(['ROLE_ADMIN'])) {
+                throw new \Exception("Unauthorized access!", 1);
             }
+            
+            if(empty($id)) throw new \Exception("There are any category to delete.", 1);
+                            
+
+            $this->query->deleteRegistry('category', 'id_category', $id);
+
+            $this->render('categories/index_view.twig', [
+                'menus'     =>  $this->showNavLinks(),
+                'session'   =>  $_SESSION,
+                'active'    =>  'administration',
+                'message'   =>  "Category deleted successfully!",                    
+            ]);
         }
     }    
 ?>
