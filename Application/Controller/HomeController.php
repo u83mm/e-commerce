@@ -15,6 +15,9 @@
                 'menus'     => $this->showNavLinks(), 
                 'session'   =>  $_SESSION,
                 'active'    =>  'home',                
-            ]);                                          
+            ]);
+            
+            // Clear session messages
+            $this->clearSessionMessages();
         }
     }    

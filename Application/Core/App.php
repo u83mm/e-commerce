@@ -6,13 +6,17 @@
     class App
     {
         public function __construct(
-			private ?Container $container = null,   
-            private string $controller = "", 
-            private string $method = "index",
-            private string $route = "",			
+			private ?Container $container 	= null,   
+            private string $controller 		= "", 
+            private string $method 			= "index",
+            private string $route 			= "",
+			private array $protectedRoutes 	= []			
         )
         {
 			$this->container = new Container();
+			$this->protectedRoutes = [
+				'AdminController' => 'admin'
+			];
         }
 
         private function splitUrl(): array|string {           
@@ -67,7 +71,13 @@
 				else {                    
 					$this->controller = "ErrorController";
 					$controller_path = '\Application\Controller\\' . ucfirst($this->controller);								
-				} 
+				}
+				
+				// Manage Middlewares
+				if(isset($this->protectedRoutes[$this->controller])) {
+					$middleware = $this->container->getMiddleware($this->protectedRoutes[$this->controller]);
+					$middleware->handle();
+				}
 				
 				$controller = $this->container->get($controller_path);
 

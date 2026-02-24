@@ -71,15 +71,15 @@
 				
 				{% if message is defined and message is not empty %}
 					<p class="alert alert-success text-center">{{ message }}</p>					
-				{% elseif error_message is defined and error_message is not empty %}
+				{% elseif error_message is defined and error_message is not empty or session.error_message is defined %}
 					{% if error_message is iterable %}
 					<p class="alert alert-danger text-center">
 						{% for key, row in error_message %}
-						{{ key }} {{ row }}<br>
+						{{ key }}: {{ row }}<br>
 						{% endfor %}
 					</p>  
 					{% else %}
-					<p class="alert alert-danger text-center">{{ error_message }}</p>
+					<p class="alert alert-danger text-center">{{ error_message }} {{ session.error_message }}</p>
 					{% endif %}						
 				{% endif %}
 				{% block main %}

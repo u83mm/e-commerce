@@ -28,6 +28,14 @@
                 die();
             }
 
+            // Define twig variables to manage in the view
+            $twig_variables = [
+                'menus'          =>  $this->showNavLinks(),
+                'error_message'  =>  $this->message,
+                'fields'         =>  $this->fields,
+                'active'         =>  'login',                                                                              
+            ];
+
             if($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Test for restrictions
                 $this->limited_access_data = $this->query_object->selectOneBy("limit_access", "ip", $_SERVER['REMOTE_ADDR']) ? 
@@ -73,11 +81,11 @@
                                         ]);						
                                     }
                                     else {
-                                        $this->message = "Bad credentials";
+                                        $this->message = "Bad credentials";                                        
                                     }                                                                
                                 }
                                 else {                                    
-                                    $this->message = "Bad credentials";
+                                    $this->message = "Bad credentials";                                    
                                 }                                  
                                 
                                 // Search if there is a restriction time
@@ -111,8 +119,7 @@
                             }
                         }
                         else {   
-                            $this->limited_access_data['failed_tries'] = 0;
-                            
+                            $this->limited_access_data['failed_tries'] = 0;                            
                             $this->message = $this->validate->get_msg();                                    
                         }
                     }
@@ -123,19 +130,16 @@
                         $minutes = floor($this->remaining_time / 60);
                         $seconds = $this->remaining_time % 60;
                         
-                        $this->message = "Access restricted. Please try again in " . $minutes . " minutes and " . $seconds . " seconds.";							                                
+                        $this->message = "Access restricted. Please try again in " . $minutes . " minutes and " . $seconds . " seconds.";                        						                                
                     } 
                 }                                       
             }   
             
             $this->fields['csrf_token'] = $this->validate->csrf_token();
+            $twig_variables['fields'] = $this->fields;
+            $twig_variables['error_message'] = $this->message;        
 
-            $this->render('login/login_view.twig', [
-                'menus'          =>  $this->showNavLinks(),
-                'error_message'  =>  $this->message,
-                'fields'         =>  $this->fields,
-                'active'         =>  'login',                                                                              
-            ]);                                            
+            $this->render('login/login_view.twig', $twig_variables);                                            
         }        
     }    
 ?>
