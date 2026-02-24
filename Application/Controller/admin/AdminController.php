@@ -7,12 +7,7 @@
 
     class AdminController extends Controller
     {        
-        public function index(): void {           
-            // Test for authorized access
-            if(!$this->testAccess(['ROLE_ADMIN'])) {
-                throw new \Exception("Unauthorized access!", 1);
-            }
-            
+        public function index(): void {                                   
             $this->render('admin/index_view.twig', [
                 'menus'     =>  $this->showNavLinks(),                         
                 'session'   =>  $_SESSION,                        

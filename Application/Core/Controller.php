@@ -47,7 +47,7 @@
             }
             
             echo $this->twig->render($template, $parameters);
-            die;
+            //die;
         }
         
         /** Shows nav menus */
