@@ -17,16 +17,7 @@
         ) {}
         
         public function index() : void
-        {                       
-            // Test privileges
-            if(!$this->testAccess([
-                'ROLE_USER',
-                'ROLE_ADMIN'
-            ])) {
-                header('Location: /login');
-                die;
-            }                                  
-
+        {            
             // Unserialize cart and get total price
             $total = 0;
             $products = isset($_SESSION['cart']) ? $_SESSION['cart'] : [];
@@ -48,16 +39,7 @@
         }
 
         public function add($id = null) : void 
-        {            
-            // Test privileges
-            if(!$this->testAccess([
-                'ROLE_USER',
-                'ROLE_ADMIN'
-            ])) {
-                header('Location: /login');
-                die;
-            }
-
+        {                       
             if($_SERVER['REQUEST_METHOD'] == "POST") {
                 $fields = [
                     'product_id'  =>  $id,
@@ -94,32 +76,14 @@
         }
 
         public function remove($id = null) : void
-        {            
-            // Test privileges
-            if(!$this->testAccess([
-                'ROLE_USER',
-                'ROLE_ADMIN'
-            ])) {
-                header('Location: /login');
-                die;
-            }
-
+        {
             unset($_SESSION['cart'][$id]);
             if(count($_SESSION['cart']) == 0) unset($_SESSION['cart']);                                                         
             header('Location: /cart/cart/index');            
         }
         
         public function update($id = null) : void
-        {            
-            // Test privileges
-            if(!$this->testAccess([
-                'ROLE_USER',
-                'ROLE_ADMIN'
-            ])) {
-                header('Location: /login');
-                die;
-            }             
-
+        {
             if($_SERVER['REQUEST_METHOD'] == "POST") {
                 $fields = [
                     'product_id' => $id,
@@ -134,15 +98,6 @@
 
         public function clear() : void
         {
-            // Test privileges
-            if(!$this->testAccess([
-                'ROLE_USER',
-                'ROLE_ADMIN'
-            ])) {
-                header('Location: /login');
-                die;
-            }
-
             unset($_SESSION['cart']);
             header('Location: /cart/cart/index');
         }
