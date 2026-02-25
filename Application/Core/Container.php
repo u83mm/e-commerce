@@ -30,6 +30,10 @@ final class Container
         $this->middlewares['admin'] = fn() => new \Application\Middlewares\RoleMiddleware([
             'ROLE_ADMIN'
         ]);
+
+        $this->middlewares['auth'] = fn() => new \Application\Middlewares\AuthMiddleware([
+            'ROLE_USER'
+        ]);
     }
 
     /** Get Middleware */

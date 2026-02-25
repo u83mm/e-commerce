@@ -30,12 +30,8 @@
         }
 
         /** Create a new category */
-        public function new() : void {
-            // Test for authorized access
-            if(!$this->testAccess(['ROLE_ADMIN'])) {
-                throw new \Exception("Unauthorized access!", 1);
-            }                                
-
+        public function new() : void 
+        {
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
                 $fields = [
                     'category' => $this->validate->test_input($_REQUEST['name']),
@@ -93,15 +89,9 @@
         }
 
         /** Delete a category */
-        public function delete($id = null) : void {
-            // Test for authorized access
-            if(!$this->testAccess(['ROLE_ADMIN'])) {
-                throw new \Exception("Unauthorized access!", 1);
-            }
-            
+        public function delete($id = null) : void {                        
             if(empty($id)) throw new \Exception("There are any category to delete.", 1);
                             
-
             $this->query->deleteRegistry('category', 'id_category', $id);
 
             $this->render('categories/index_view.twig', [
