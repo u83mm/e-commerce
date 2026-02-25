@@ -25,12 +25,7 @@ final class DocumentController extends Controller
     }
    
     public function upload() : void
-    {        
-        // Test for authorized access
-        if(!$this->testAccess(['ROLE_ADMIN'])) {
-            throw new \Exception("Unauthorized access!", 1);
-        }
-
+    {
         if($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Manage file upload
             $fields = [                
@@ -92,12 +87,7 @@ final class DocumentController extends Controller
     }
     
     public function showDocuments() : void
-    {        
-        // Test for authorized access
-        if(!$this->testAccess(['ROLE_ADMIN', 'ROLE_USER'])) {
-            throw new \Exception("Unauthorized access!", 1);
-        }
-
+    {
         // Declare variables to render
         $variables = [
                 'menus'      =>  $this->showNavLinks(),
@@ -123,12 +113,7 @@ final class DocumentController extends Controller
     }
 
     public function digitallySign($id = null) : void
-    {                                     
-        // Test for authorized access
-        if(!$this->testAccess(['ROLE_ADMIN', 'ROLE_USER'])) {
-            throw new \Exception("Unauthorized access!", 1);
-        }            
-
+    {
         // Set the path to your private key and certificate
         $privateKeyPath  = 'file://' . realpath(PRIVATE_KEY_PATH);
         $certificatePath = 'file://' . realpath(CERTIFICATE_PATH);
@@ -195,12 +180,7 @@ final class DocumentController extends Controller
     }
     
     public function delete($id = null) : void
-    {                       
-        // Test for authorized access
-        if(!$this->testAccess(['ROLE_ADMIN'])) {
-            throw new \Exception("Unauthorized access!", 1);
-        }
-
+    {
         $document = $this->query->selectOneBy('documents', 'document_id', $id);
 
         if(!$document) {

@@ -33,6 +33,7 @@
                 'menus'          =>  $this->showNavLinks(),
                 'error_message'  =>  $this->message,
                 'fields'         =>  $this->fields,
+                'session'        =>  $_SESSION,
                 'active'         =>  'login',                                                                              
             ];
 
@@ -72,13 +73,9 @@
                                         $_SESSION['role']      = $result['role'];
                                         
                                         // Delete the restriction time
-                                        if(isset($this->limited_access_data['id'])) $this->query_object->deleteRegistry("limit_access", 'id', $this->limited_access_data['id']);										
-                                                                                                        
-                                        $this->render('main_view.twig', [
-                                            'menus'     =>  $this->showNavLinks(),                                     
-                                            'session'   =>  $_SESSION, 
-                                            'active'    =>  'home',                  
-                                        ]);						
+                                        if(isset($this->limited_access_data['id'])) $this->query_object->deleteRegistry("limit_access", 'id', $this->limited_access_data['id']);                                                                                                                                                
+                                        
+                                        header("Location: /");
                                     }
                                     else {
                                         $this->message = "Bad credentials";                                        
@@ -139,7 +136,8 @@
             $twig_variables['fields'] = $this->fields;
             $twig_variables['error_message'] = $this->message;        
 
-            $this->render('login/login_view.twig', $twig_variables);                                            
+            $this->render('login/login_view.twig', $twig_variables);
+            $this->clearSessionMessages();                                            
         }        
     }    
 ?>
