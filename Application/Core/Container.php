@@ -74,34 +74,34 @@ final class Container
      */
     private function registerControllerFactories(): void
     {
-        $this->factories["\Application\Controller\LoginController"] = fn() => new \Application\Controller\LoginController(
+        $this->factories[\Application\Controller\LoginController::class] = fn() => new \Application\Controller\LoginController(
             $this->get('validate'),
             $this->get('query')
         );               
 
-        $this->factories["\Application\Controller\RegisterController"] = fn() => new \Application\Controller\RegisterController(
+        $this->factories[\Application\Controller\RegisterController::class] = fn() => new \Application\Controller\RegisterController(
             $this->get('validate'),
             $this->get('query'),
             $this->get('user_repository')
         );
         
-        $this->factories["\Application\Controller\products\ProductsController"] = fn() => new \Application\Controller\products\ProductsController(
+        $this->factories[\Application\Controller\products\ProductsController::class] = fn() => new \Application\Controller\products\ProductsController(
             $this->get('validate'),
             $this->get('query'),
             $this->get('common_tasks')
         );
 
-        $this->factories["\Application\Controller\cart\CartController"] = fn() => new \Application\Controller\cart\CartController(
+        $this->factories[\Application\Controller\cart\CartController::class] = fn() => new \Application\Controller\cart\CartController(
             $this->get('validate'),
             $this->get('query')
         );
 
-        $this->factories["\Application\Controller\category\CategoryController"] = fn() => new \Application\Controller\category\CategoryController(
+        $this->factories[\Application\Controller\category\CategoryController::class] = fn() => new \Application\Controller\category\CategoryController(
             $this->get('validate'),
             $this->get('query')
         );
 
-        $this->factories["\Application\Controller\admin\DocumentController"] = fn() => new \Application\Controller\admin\DocumentController(
+        $this->factories[\Application\Controller\admin\DocumentController::class] = fn() => new \Application\Controller\admin\DocumentController(
             $this->get('validate'),
             $this->get('query')
         );
@@ -110,6 +110,8 @@ final class Container
     /** We get a service or build a controller */
     public function get(string $id): object
     {
+        $id = ltrim($id, '\\');
+
         // If it's a controller defined in our factories
         if(isset($this->factories[$id])) {
             return $this->factories[$id]();
