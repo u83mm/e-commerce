@@ -19,6 +19,8 @@
 ###< symfony/phpunit-bridge ###
 
 ###> my files to ignore ###
+/Application/db_vol
+/Application/log
 *.pem
 *.key
 *.crt
