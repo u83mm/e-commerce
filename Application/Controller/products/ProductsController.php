@@ -27,21 +27,17 @@
             // We obtain all products from DB
             $this->products = $this->query->selectAll('products');
 
-            if (!$this->products) {
-                $this->render('products/index_view.twig', [
-                    'menus'         =>  $this->showNavLinks(), 
-                    'error_message' =>  "There aren't products to show.",
-                    'session'       =>  $_SESSION,                        
-                    'active'        =>  'catalog',                
-                ]);
-            }
-            
-            $this->render('products/index_view.twig', [
+            // Variables to use in the view
+            $twig_variables = [
                 'menus'     =>  $this->showNavLinks(),
                 'session'   =>  $_SESSION,
                 'active'    => 'catalog',
                 'products'  =>  $this->products,
-            ]);            
+            ];
+
+            if (!$this->products) $twig_variables['error_message'] = "There aren't products to show.";
+            
+            $this->render('products/index_view.twig', $twig_variables);            
         }
 
         /** Create a new product */
