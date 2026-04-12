@@ -213,36 +213,35 @@
       * @param array fields an array of fields to be inserted into the database.
       * @param string table The table name you want to insert into.
       */
-        public function insertInto(string $table, array $fields): void
+        public function insertInto(string $table, array|object $fields): void
         {
-            /** Initialice variables */
-            $query = $values = "";
-            $insert = "INSERT INTO $table (";            
+            $data = is_object($fields) ? (array) $fields : $fields;
 
-            foreach ($fields as $key => $value) {
-                $insert .= $key . ",";
-                $values .= ":$key,";
+            /** Filter the data */
+            $filteredData = array_filter($data, fn($value) => $value !== null);
+
+            if(empty($filteredData)) {
+                throw new \Exception("There aren´t valid data to insert in $table", 1);                
             }
 
-            /** Prepare variables for make the query */
-            $insert_size = strlen($insert);
-            $insert = substr($insert, 0, $insert_size-1) . ") VALUES (";          
-            $value_size = strlen($values);
-            $values = substr($values, 0, $value_size-1) . ")";
+            $columns = implode(',', array_keys($filteredData));
+            $placeholders = ":" . implode(", :", array_keys($filteredData));
 
-            /** Make the query */
-            $query = $insert . $values;            
+            /** Build the query */
+            $query = "INSERT INTO $table ($columns) VALUES($placeholders)";                        
                                                     
             try {
                 $stm = $this->pdo->prepare($query);
-                foreach ($fields as $key => $value) {
+
+                foreach ($filteredData as $key => $value) {
                     if($key === 'password') {
                         $stm->bindValue(":password", password_hash($value, PASSWORD_DEFAULT));
                         continue;
                     }
                     
                     $stm->bindValue(":$key", $value);
-                }                   
+                }
+                                   
                 $stm->execute();       				
                 $stm->closeCursor();
                 
@@ -358,6 +357,33 @@
                 
             } catch (\Throwable $th) {
                 throw new \Exception("{$th->getMessage()}", 1);             
+            }
+        }
+
+        /**
+         * Método genérico para obtener CUALQUIER entidad por CUALQUIER campo
+         * @template T
+         * @param class-string<T> $className Nombre de la clase (ej: User::class)
+         * @return T|bool
+         */
+        public function findOneBy(string $table, string $field, mixed $value, string $className): object|bool
+        {
+            $query = "SELECT * FROM $table WHERE $field = :val LIMIT 1";
+
+            try {
+                $stm = $this->pdo->prepare($query);
+                $stm->bindValue(":val", $value);
+                $stm->execute();
+                $data = $stm->fetch(PDO::FETCH_ASSOC);
+                $stm->closeCursor();
+
+                if (!$data) return false;
+
+                // ¡Magia! Creamos cualquier clase dinámicamente
+                return new $className(...$data);
+
+            } catch (\Throwable $th) {
+                throw new \Exception("Error buscando en $table: " . $th->getMessage());
             }
         }
     }    
