@@ -5,6 +5,7 @@
 
     use App\Core\Controller;
     use Application\model\classes\CommonTasks;
+    use Application\model\classes\Entity\Product;
     use Application\model\classes\Query;
     use Application\model\classes\Validate;
 
@@ -48,7 +49,14 @@
             }
                             
             // Get all categories
-            $this->categories = $this->query->selectAll('category');                
+            $this->categories = $this->query->selectAll('category');
+            
+            $twig_variables = [
+                'menus'         =>  $this->showNavLinks(),
+                'session'       =>  $_SESSION,
+                'active'        =>  'administration',
+                'categories'    =>  $this->categories,
+            ];
 
             // If form is send and is valid
             if($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -56,8 +64,8 @@
                 $fields = [
                     'name'        => !empty($_POST['name'])        ? $this->validate->test_input($_POST['name']) : null,
                     'description' => !empty($_POST['description']) ? $this->validate->test_input($_POST['description']) : null,
-                    'price'       => !empty($_POST['price'])       ? $this->validate->test_input($_POST['price']) : "",
-                    'id_category' => !empty($_POST['category'])    ? $this->validate->test_input($_POST['category']): "",
+                    'price'       => !empty($_POST['price'])       ? (float) $this->validate->test_input($_POST['price']) : "",
+                    'id_category' => !empty($_POST['category'])    ? (int) $this->validate->test_input($_POST['category']): null,
                 ];                    
                 
                 // Save data in DB
@@ -128,34 +136,18 @@
                     // Insert data in DB                        
                     $fields['image'] = $this->commonTask->getWebPath($upload_filename);
 
-                    $this->query->insertInto('products', $fields);
+                    $product = new Product(...$fields);
+                    $this->query->insertInto('products', $product);
 
-                    $this->render('products/new_product_view.twig', [
-                        'menus'      => $this->showNavLinks(),
-                        'session'    => $_SESSION,
-                        'active'     => 'administration',
-                        'categories' => $this->categories,                            
-                        'message'    => "Product saved successfully!",
-                    ]);                        
+                    $twig_variables['message'] = "Product saved successfully!";                                                               
                 }
                 else {
-                    $this->render('products/new_product_view.twig', [
-                        'menus'         =>  $this->showNavLinks(),
-                        'session'       =>  $_SESSION,
-                        'active'        => 'administration',
-                        'fields'        =>  $fields,
-                        'categories'    =>  $this->categories,
-                        'error_message' => $this->validate->get_msg(),
-                    ]);
+                    $twig_variables['fields']        = $fields;
+                    $twig_variables['error_message'] = $this->validate->get_msg();                                     
                 }
             }
                                             
-            $this->render('products/new_product_view.twig', [
-                'menus'         =>  $this->showNavLinks(),
-                'session'       =>  $_SESSION,
-                'active'        =>  'administration',
-                'categories'    =>  $this->categories,
-            ]);
+            $this->render('products/new_product_view.twig', $twig_variables);
         }
 
         /** Show product */
@@ -298,11 +290,11 @@
             
             if(empty($id)) throw new \Exception("There are any product to edit.", 1);                
 
-            // Get product to delete
-            $product = $this->query->selectOneBy('products', 'id', $id);
+            // Get product to delete           
+            $product = $this->query->findOneBy('products', 'id', $id, Product::class);
 
             $this->query->deleteRegistry('products', 'id', $id);
-            $this->commonTask->deleteFileFromServer($product['image']);
+            $this->commonTask->deleteFileFromServer($product->image);
 
             $this->render('products/index_view.twig', [
                 'menus'    =>  $this->showNavLinks(),
