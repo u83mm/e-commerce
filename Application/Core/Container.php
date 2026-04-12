@@ -52,21 +52,10 @@ final class Container
      */
     private function registerBaseServices(): void 
     {
-        $this->services['query'] = function() {            
-            return new Query($this->dbcon->getConnection());
-        };
-
-        $this->services['validate'] = function() {
-            return new Validate;
-        };
-        
-        $this->services['user_repository'] = function() {
-            return new UserRepository($this->dbcon->getConnection());
-        };
-
-        $this->services['common_tasks'] = function() {
-            return new CommonTasks;
-        };
+        $this->services['query']            = fn() => new Query($this->dbcon->getConnection());
+        $this->services['validate']         = fn() => new Validate;        
+        $this->services['user_repository']  = fn() => new UserRepository($this->dbcon->getConnection());
+        $this->services['common_tasks']     = fn() => new CommonTasks;
     }
 
     /** 
