@@ -1,5 +1,4 @@
-Enter password: 
-/*M!999999\- enable the sandbox mode */ 
+ /*M!999999\- enable the sandbox mode */ 
 -- MariaDB dump 10.19-11.5.2-MariaDB, for debian-linux-gnu (x86_64)
 --
 -- Host: localhost    Database: my_database
