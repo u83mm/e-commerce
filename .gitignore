@@ -27,3 +27,4 @@
 *.p12
 *.csr
 ###< my files to ignore ###
+.aider*
