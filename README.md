@@ -1,4 +1,7 @@
 ### Online Shop Project
+This is an e-commerce platform built using PHP and Docker, providing a complete online shopping experience.
+
+### How to run the project
 1.- Clone the repository in a new directory of your choice ("directoryName").
 ```
 git clone https://github.com/u83mm/e-commerce.git "directoryName"
